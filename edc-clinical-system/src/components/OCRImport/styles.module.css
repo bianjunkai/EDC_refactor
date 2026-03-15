@@ -1,0 +1,71 @@
+/* OCRImport 组件样式 */
+
+.container {
+  min-height: 300px;
+}
+
+/* 上传区域 */
+.uploader {
+  padding: 32px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  background: #fafafa;
+  transition: all 0.3s;
+}
+
+.uploader:hover {
+  border-color: #5CB8A6;
+}
+
+/* 预览区域 */
+.previewSection {
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+  background: white;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+/* 结果区域 */
+.resultSection {
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  min-height: 300px;
+}
+
+.progressSection {
+  padding: 32px;
+  text-align: center;
+}
+
+/* 结果项 */
+.resultItem {
+  padding: 12px 16px;
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  transition: all 0.3s;
+}
+
+.resultItem:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+}
+
+/* 空状态 */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0;
+  gap: 16px;
+}

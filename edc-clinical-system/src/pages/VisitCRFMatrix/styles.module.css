@@ -1,0 +1,83 @@
+/* VisitCRFMatrix 页面样式 */
+
+.container {
+  padding-bottom: var(--space-xl);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.title {
+  margin: 0 0 var(--space-xs) 0 !important;
+}
+
+/* 矩阵卡片 */
+.matrixCard {
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.matrixCard :global(.ant-table-cell) {
+  padding: 12px 8px !important;
+}
+
+/* 访视单元格 */
+.visitCell {
+  text-align: left;
+}
+
+.visitName {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-title);
+}
+
+.visitPhase {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+/* CRF表头 */
+.crfHeader {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+/* 导入卡片 */
+.importCard {
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.templateDesc {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.templateDesc li {
+  margin-bottom: 4px;
+}
+
+/* AI卡片 */
+.aiCard {
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+  background: linear-gradient(135deg, #f6ffed 0%, #ffffff 100%);
+}
+
+/* 底部操作 */
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--color-border-light);
+  margin-top: var(--space-lg);
+}

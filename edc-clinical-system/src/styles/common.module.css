@@ -1,0 +1,215 @@
+/* ============================================
+   EDC 系统 - 通用样式模块
+   ============================================ */
+
+/* -------------------- 布局工具 -------------------- */
+.flex {
+  display: flex;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flexWrap {
+  flex-wrap: wrap;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+/* -------------------- 间距工具 -------------------- */
+.gapXs { gap: var(--space-xs); }
+.gapSm { gap: var(--space-sm); }
+.gapMd { gap: var(--space-md); }
+.gapLg { gap: var(--space-lg); }
+.gapXl { gap: var(--space-xl); }
+
+.pXs { padding: var(--space-xs); }
+.pSm { padding: var(--space-sm); }
+.pMd { padding: var(--space-md); }
+.pLg { padding: var(--space-lg); }
+.pXl { padding: var(--space-xl); }
+
+/* -------------------- 文本工具 -------------------- */
+.textTitle {
+  color: var(--color-text-title);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.textBody {
+  color: var(--color-text-body);
+  font-size: var(--font-size-base);
+}
+
+.textSecondary {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.textPlaceholder {
+  color: var(--color-text-placeholder);
+  font-size: var(--font-size-sm);
+}
+
+.textPrimary {
+  color: var(--color-primary-500);
+}
+
+.textSuccess {
+  color: var(--color-success);
+}
+
+.textWarning {
+  color: var(--color-warning);
+}
+
+.textError {
+  color: var(--color-error);
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.textEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* -------------------- 卡片样式 -------------------- */
+.card {
+  background: var(--color-background-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.cardHeader {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.cardBody {
+  padding: var(--space-lg);
+}
+
+/* -------------------- 列表项 -------------------- */
+.listItem {
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+/* -------------------- 图标容器 -------------------- */
+.iconContainer {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-50);
+}
+
+.iconContainerSm {
+  width: 24px;
+  height: 24px;
+}
+
+.iconContainerLg {
+  width: 40px;
+  height: 40px;
+}
+
+/* -------------------- 可点击区域 -------------------- */
+.clickable {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.clickable:hover {
+  background-color: var(--color-primary-50);
+}
+
+.clickable:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* -------------------- 统计卡片 -------------------- */
+.statCard {
+  composes: card;
+  padding: var(--space-lg);
+}
+
+.statValue {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.statLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+}
+
+/* -------------------- 快速操作按钮 -------------------- */
+.actionButton {
+  height: 40px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-md);
+}
+
+/* -------------------- 可访问性 -------------------- */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focusVisible:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* -------------------- 响应式隐藏 -------------------- */
+@media (max-width: 768px) {
+  .hideMobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hideDesktop {
+    display: none !important;
+  }
+}

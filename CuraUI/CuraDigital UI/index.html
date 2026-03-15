@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Centralizado - CuraDigital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #F8F9FA;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #fff;
+            border-right: 1px solid #E8E8E8;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #5CB8A6;
+        }
+        
+        .user-info {
+            padding: 0 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #E8E8E8;
+            margin-bottom: 16px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #5CB8A6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .user-role {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .nav-menu {
+            flex: 1;
+            padding: 0 12px;
+        }
+        
+        .nav-item {
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-item:hover {
+            background: #F5F5F5;
+        }
+        
+        .nav-item.active {
+            background: #E8F5F2;
+            color: #5CB8A6;
+            font-weight: 500;
+        }
+        
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .nav-submenu {
+            padding-left: 40px;
+        }
+        
+        .nav-submenu-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        
+        .nav-submenu-item:hover {
+            background: #F5F5F5;
+        }
+        
+        .nav-submenu-item.active {
+            color: #5CB8A6;
+            font-weight: 500;
+        }
+        
+        .nav-expand {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        
+        .nav-expand.expanded {
+            transform: rotate(180deg);
+        }
+        
+        .logout {
+            padding: 16px 20px;
+            border-top: 1px solid #E8E8E8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .logout:hover {
+            color: #333;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-y: auto;
+        }
+        
+        .breadcrumb {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 24px;
+        }
+        
+        /* Stats Tabs */
+        .stats-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-tab {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-tab:first-child {
+            background: #fff;
+            color: #666;
+            border: 1px solid #E8E8E8;
+        }
+        
+        .stat-tab:last-child {
+            background: #5CB8A6;
+            color: #fff;
+        }
+        
+        .stat-tab .number {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        /* Stats Cards Row */
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-icon.blue {
+            background: #E3F2FD;
+        }
+        
+        .stat-icon.green {
+            background: #E8F5E9;
+        }
+        
+        .stat-icon.orange {
+            background: #FFF3E0;
+        }
+        
+        .stat-icon.purple {
+            background: #F3E5F5;
+        }
+        
+        .stat-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .stat-info {
+            flex: 1;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        /* Sede Cards Grid */
+        .sede-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .sede-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        
+        .sede-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .sede-icon {
+            width: 24px;
+            height: 24px;
+            color: #5CB8A6;
+        }
+        
+        .sede-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .sede-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #F0F0F0;
+            font-size: 13px;
+        }
+        
+        .sede-row:last-of-type {
+            border-bottom: none;
+        }
+        
+        .sede-label {
+            color: #666;
+        }
+        
+        .sede-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .sede-footer {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #F0F0F0;
+        }
+        
+        .sede-footer-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+        
+        .sede-footer-label {
+            color: #999;
+        }
+        
+        .sede-footer-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 32px;
+        }
+        
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #E0E0E0;
+        }
+        
+        .pagination-dot.active {
+            background: #5CB8A6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+                    <path d="M16 4C12 4 8 6 8 10C8 14 12 16 16 16C20 16 24 14 24 10C24 6 20 4 16 4Z" fill="#5CB8A6"/>
+                    <path d="M16 16V28" stroke="#5CB8A6" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M10 22H22" stroke="#5CB8A6" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="24" cy="8" r="4" fill="#5CB8A6"/>
+                </svg>
+                <span class="logo-text">CuraDigital</span>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">DM</div>
+                <div class="user-details">
+                    <span class="user-name">Daniel Martinez</span>
+                    <span class="user-role">Administrador</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>Home</span>
+                </div>
+                
+                <div class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Dashboards</span>
+                    <svg class="nav-expand expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                
+                <div class="nav-submenu">
+                    <div class="nav-submenu-item active">Centralizado</div>
+                    <div class="nav-submenu-item">Urgent Care</div>
+                    <div class="nav-submenu-item">DAV</div>
+                </div>
+                
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span>Administración</span>
+                    <svg class="nav-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                    <span>Servicios</span>
+                    <svg class="nav-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                
+                <div class="nav-item" onclick="window.location.href='reportes-servicios.html'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    <span>Reportes</span>
+                    <svg class="nav-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Configuraciones</span>
+                    <svg class="nav-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                
+                <div class="nav-item" onclick="window.location.href='atencion-clara.html'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>Atenciones</span>
+                </div>
+                
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    <span>Servicios Urgent Care</span>
+                    <svg class="nav-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+            </nav>
+            
+            <div class="logout">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span>Cerrar sesión</span>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="breadcrumb">Dashboards / Dashboard Centralizado</div>
+            <h1 class="page-title">Dashboard Centralizado</h1>
+            
+            <!-- Stats Tabs -->
+            <div class="stats-tabs">
+                <div class="stat-tab">
+                    <span>Atenciones Particulares</span>
+                    <span class="number">38</span>
+                </div>
+                <div class="stat-tab">
+                    <span>Atenciones Paquetes</span>
+                    <span class="number">108</span>
+                </div>
+            </div>
+            
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Atenciones en Espera</div>
+                        <div class="stat-value">8.035</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Atenciones en Triaje</div>
+                        <div class="stat-value">2.035</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Atenciones en Aprobación</div>
+                        <div class="stat-value">15.035</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#9C27B0" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">En Atención</div>
+                        <div class="stat-value">28.035</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sede Cards Grid -->
+            <div class="sede-grid">
+                <!-- Sede Card 1 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sede Card 2 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sede Card 3 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sede Card 4 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sede Card 5 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sede Card 6 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sede Card 7 -->
+                <div class="sede-card">
+                    <div class="sede-header">
+                        <svg class="sede-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="sede-title">Sede</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Espera</span>
+                        <span class="sede-value">25</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Triaje</span>
+                        <span class="sede-value">9</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones en Aprobación</span>
+                        <span class="sede-value">20</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">En Atención</span>
+                        <span class="sede-value">5</span>
+                    </div>
+                    <div class="sede-row">
+                        <span class="sede-label">Atenciones por Egresar</span>
+                        <span class="sede-value">65</span>
+                    </div>
+                    <div class="sede-footer">
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Particulares</span>
+                            <span class="sede-footer-value">25</span>
+                        </div>
+                        <div class="sede-footer-item">
+                            <span class="sede-footer-label">Total Paquetes</span>
+                            <span class="sede-footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-dot active"></div>
+                <div class="pagination-dot"></div>
+                <div class="pagination-dot"></div>
+                <div class="pagination-dot"></div>
+                <div class="pagination-dot"></div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

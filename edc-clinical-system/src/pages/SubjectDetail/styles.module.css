@@ -1,0 +1,130 @@
+/* SubjectDetail 页面样式 */
+
+.container {
+  padding-bottom: var(--space-xl);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.title {
+  margin: 0 0 var(--space-xs) 0 !important;
+}
+
+.tabs {
+  margin-bottom: var(--space-lg);
+}
+
+.tabs :global(.ant-tabs-tab) {
+  padding: var(--space-sm) var(--space-md);
+}
+
+.tabContent {
+  min-height: 400px;
+}
+
+/* 信息卡片 */
+.infoCard {
+  border-radius: var(--radius-lg);
+}
+
+/* 联系卡片 */
+.contactCard {
+  border-radius: var(--radius-lg);
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.contactItem:last-child {
+  border-bottom: none;
+}
+
+.contactIcon {
+  color: var(--color-primary-500);
+  font-size: 16px;
+}
+
+/* 进度卡片 */
+.progressCard {
+  border-radius: var(--radius-lg);
+}
+
+.progressText {
+  text-align: center;
+  margin-top: var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+/* 访视卡片 */
+.visitCard {
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.visitItem {
+  padding: var(--space-md);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+}
+
+.visitTitle {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-title);
+  margin-bottom: var(--space-xs);
+}
+
+.visitMeta {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.visitCrfs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* CRF卡片 */
+.crfCard {
+  border-radius: var(--radius-lg);
+}
+
+/* 质疑卡片 */
+.queryCard {
+  border-radius: var(--radius-lg);
+}
+
+.emptyQueries {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  gap: var(--space-lg);
+}
+
+/* 空状态 */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--space-lg);
+}

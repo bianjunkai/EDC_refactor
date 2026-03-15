@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目列表 - EDC</title>
+    <link rel="stylesheet" href="https://unpkg.com/antd@4.24.0/dist/antd.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        
+        /* 顶部导航 */
+        .header { background: #fff; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8e8e8; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo { font-size: 18px; font-weight: 600; color: #1890ff; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .user-info { display: flex; align-items: center; gap: 8px; }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1890ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        
+        /* 主内容 */
+        .main { padding: 24px; }
+        
+        /* 操作栏 */
+        .toolbar { background: #fff; padding: 16px 24px; border-radius: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .toolbar-left { display: flex; align-items: center; gap: 16px; }
+        .toolbar-right { display: flex; gap: 12px; }
+        
+        .search-input { width: 220px; height: 36px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 12px; font-size: 14px; }
+        .filter-select { height: 36px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 0 12px; font-size: 14px; }
+        
+        .btn { padding: 8px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #1890ff; color: #fff; }
+        .btn-primary:hover { background: #40a9ff; }
+        .btn-default { background: #fff; border: 1px solid #d9d9d9; color: #333; }
+        .btn-default:hover { border-color: #40a9ff; color: #40a9ff; }
+        
+        /* 表格 */
+        .table-container { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th { background: #fafafa; padding: 14px 16px; text-align: left; font-weight: 600; font-size: 14px; color: #333; border-bottom: 1px solid #e8e8e8; }
+        .table td { padding: 14px 16px; font-size: 14px; color: #333; border-bottom: 1px solid #f0f0f0; }
+        .table tr:hover { background: #f5f5f5; cursor: pointer; }
+        
+        .project-name { font-weight: 500; color: #1890ff; }
+        .project-desc { font-size: 12px; color: #999; margin-top: 4px; }
+        
+        .status-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .status-setup { background: #f5f5f5; color: #666; }
+        .status-pending { background: #e6f7ff; color: #1890ff; }
+        .status-rejected { background: #fff1f0; color: #ff4d4f; }
+        .status-active { background: #f6ffed; color: #52c41a; }
+        .status-paused { background: #fff7e6; color: #fa8c16; }
+        .status-completed { background: #f9f0ff; color: #722ed1; }
+        .status-locked { background: #f0f5ff; color: #2f54eb; }
+        .status-voided { background: #f5f5f5; color: #999; }
+        
+        .action-btn { color: #1890ff; cursor: pointer; font-size: 13px; }
+        
+        /* 分页 */
+        .pagination { padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f0f0f0; }
+        .pagination-info { font-size: 14px; color: #666; }
+        
+        /* 详情侧边栏 */
+        .detail-sidebar { position: fixed; top: 0; right: -420px; width: 420px; height: 100vh; background: #fff; box-shadow: -2px 0 8px rgba(0,0,0,0.1); transition: right 0.3s; z-index: 100; }
+        .detail-sidebar.open { right: 0; }
+        .sidebar-header { padding: 20px 24px; border-bottom: 1px solid #e8e8e8; display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-title { font-size: 16px; font-weight: 600; }
+        .sidebar-close { font-size: 20px; cursor: pointer; color: #999; }
+        .sidebar-content { padding: 24px; height: calc(100vh - 64px); overflow-y: auto; }
+        
+        .info-section { margin-bottom: 24px; }
+        .info-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .info-label { color: #666; }
+        .info-value { color: #333; font-weight: 500; }
+        
+        .progress-bar { height: 8px; background: #f0f0f0; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; }
+        
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+        .stat-card { background: #fafafa; padding: 12px; border-radius: 6px; text-align: center; }
+        .stat-num { font-size: 20px; font-weight: 600; color: #1890ff; }
+        .stat-label { font-size: 12px; color: #999; margin-top: 4px; }
+        
+        .sidebar-actions { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .sidebar-actions .btn { flex: 1; min-width: 90px; }
+        
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); display: none; z-index: 99; }
+        .overlay.show { display: block; }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">🏥 EDC系统</div>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="avatar">张</div>
+                <span>张医生</span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 主内容 -->
+    <main class="main">
+        <!-- 操作栏 -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <select class="filter-select" style="min-width: 150px;">
+                    <option>我的项目</option>
+                    <option>我参与的</option>
+                    <option>我发起的</option>
+                </select>
+                <select class="filter-select">
+                    <option>全部状态</option>
+                    <option>立项中</option>
+                    <option>审批中</option>
+                    <option>已驳回</option>
+                    <option>进行中</option>
+                    <option>已暂停</option>
+                    <option>已完成</option>
+                    <option>已锁库</option>
+                </select>
+                <input type="text" class="search-input" placeholder="搜索项目名称...">
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-default">📥 导出</button>
+                <button class="btn btn-primary">➕ 新建项目</button>
+            </div>
+        </div>
+        
+        <!-- 表格 -->
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>项目名称</th>
+                        <th>状态</th>
+                        <th>中心数</th>
+                        <th>受试者数</th>
+                        <th>入组数</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="toggleSidebar(this)">
+                        <td>
+                            <div class="project-name">肿瘤药物临床试验A</div>
+                            <div class="project-desc">一项评估X药物治疗非小细胞肺癌的疗效...</div>
+                        </td>
+                        <td><span class="status-tag status-active">进行中</span></td>
+                        <td>3</td>
+                        <td>86</td>
+                        <td>45</td>
+                        <td>2026-02-01</td>
+                        <td><span class="action-btn">▶</span></td>
+                    </tr>
+                    <tr onclick="toggleSidebar(this)">
+                        <td>
+                            <div class="project-name">心血管药物试验B</div>
+                            <div class="project-desc">评估降压药物对原发性高血压的疗效</div>
+                        </td>
+                        <td><span class="status-tag status-pending">审批中</span></td>
+                        <td>2</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>2026-03-01</td>
+                        <td><span class="action-btn">▶</span></td>
+                    </tr>
+                    <tr onclick="toggleSidebar(this)">
+                        <td>
+                            <div class="project-name">糖尿病新药试验C</div>
+                            <div class="project-desc">口服降糖药物II期临床试验</div>
+                        </td>
+                        <td><span class="status-tag status-rejected">已驳回</span></td>
+                        <td>1</td>
+                        <td>12</td>
+                        <td>0</td>
+                        <td>2026-01-15</td>
+                        <td><span class="action-btn">▶</span></td>
+                    </tr>
+                    <tr onclick="toggleSidebar(this)">
+                        <td>
+                            <div class="project-name">阿尔茨海默病药物D</div>
+                            <div class="project-description">评估药物对轻度认知障碍的改善作用</div>
+                        </td>
+                        <td><span class="status-tag status-paused">已暂停</span></td>
+                        <td>4</td>
+                        <td>52</td>
+                        <td>30</td>
+                        <td>2025-12-10</td>
+                        <td><span class="action-btn">▶</span></td>
+                    </tr>
+                    <tr onclick="toggleSidebar(this)">
+                        <td>
+                            <div class="project-name">康复训练研究E</div>
+                            <div class="project-desc">术后康复训练方案有效性研究</div>
+                        </td>
+                        <td><span class="status-tag status-locked">已锁库</span></td>
+                        <td>2</td>
+                        <td>100</td>
+                        <td>85</td>
+                        <td>2025-06-20</td>
+                        <td><span class="action-btn">▶</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- 分页 -->
+            <div class="pagination">
+                <div class="pagination-info">共 24 条，每页 10 条</div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-default" style="padding: 4px 12px;">‹</button>
+                    <button class="btn btn-primary" style="padding: 4px 12px;">1</button>
+                    <button class="btn btn-default" style="padding: 4px 12px;">2</button>
+                    <button class="btn btn-default" style="padding: 4px 12px;">3</button>
+                    <button class="btn btn-default" style="padding: 4px 12px;">›</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+    
+    <!-- 详情侧边栏 -->
+    <div class="detail-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title">📁 肿瘤药物临床试验A</span>
+            <span class="sidebar-close" onclick="closeSidebar()">×</span>
+        </div>
+        <div class="sidebar-content">
+            <div class="info-section">
+                <div class="info-title">项目信息</div>
+                <div class="info-row">
+                    <span class="info-label">状态</span>
+                    <span class="info-value"><span class="status-tag status-active">进行中</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">中心数</span>
+                    <span class="info-value">3</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">受试者数</span>
+                    <span class="info-value">86</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">入组数</span>
+                    <span class="info-value">45</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">CRF数</span>
+                    <span class="info-value">12</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">创建时间</span>
+                    <span class="info-value">2026-02-01</span>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-title">进度概览</div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-num">41</div>
+                        <div class="stat-label">筛选中</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" style="color: #1890ff;">45</div>
+                        <div class="stat-label">已入组</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" style="color: #52c41a;">12</div>
+                        <div class="stat-label">已完成</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" style="color: #fa8c16;">3</div>
+                        <div class="stat-label">脱落</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div class="info-row">
+                        <span class="info-label">入组进度</span>
+                        <span class="info-value">45/100 (45%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%; background: linear-gradient(90deg, #1890ff, #40a9ff);"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-title">最近活动</div>
+                <div class="info-row">
+                    <span class="info-label">最后录入</span>
+                    <span class="info-value">2026-03-07 10:30</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">待处理质疑</span>
+                    <span class="info-value" style="color: #fa8c16;">5</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-actions">
+                <button class="btn btn-primary">📋 查看详情</button>
+                <button class="btn btn-default">✏️ 编辑</button>
+                <button class="btn btn-default">👥 成员</button>
+                <button class="btn btn-default">📥 导出</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleSidebar(row) {
+            document.querySelectorAll('.table tr').forEach(r => r.style.background = '');
+            row.style.background = '#e6f7ff';
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        }
+        
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+            document.querySelectorAll('.table tr').forEach(r => r.style.background = '');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+/* ProjectDetail 页面样式 */
+
+.container {
+  padding-bottom: var(--space-xl);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.title {
+  margin: 0 0 var(--space-xs) 0 !important;
+}
+
+.tabs {
+  margin-bottom: var(--space-lg);
+}
+
+.tabs :global(.ant-tabs-tab) {
+  padding: var(--space-sm) var(--space-md);
+}
+
+.tabContent {
+  min-height: 400px;
+}
+
+/* 概览卡片 */
+.overviewCard {
+  border-radius: var(--radius-lg);
+  height: 100%;
+}
+
+.progressCircle {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl) 0;
+}
+
+.progressFormat {
+  text-align: center;
+}
+
+.progressPercent {
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-500);
+}
+
+.progressLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.progressMeta {
+  text-align: center;
+  margin-top: var(--space-md);
+}
+
+/* 图表卡片 */
+.chartCard {
+  border-radius: var(--radius-lg);
+}
+
+.chartPlaceholder {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  gap: var(--space-lg);
+}
+
+/* 活动卡片 */
+.activityCard {
+  border-radius: var(--radius-lg);
+}
+
+.activityContent {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+}
+
+.activityTime {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-placeholder);
+  margin-top: var(--space-xs);
+}
+
+/* 信息卡片 */
+.infoCard {
+  border-radius: var(--radius-lg);
+}
+
+/* 工作流卡片 */
+.workflowCard {
+  border-radius: var(--radius-lg);
+}
+
+.workflowTitle {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-title);
+}
+
+.workflowDesc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* 成员卡片 */
+.membersCard {
+  border-radius: var(--radius-lg);
+}
+
+/* CRF卡片 */
+.crfCard {
+  border-radius: var(--radius-lg);
+}
+
+/* 质疑卡片 */
+.queryCard {
+  border-radius: var(--radius-lg);
+}
+
+/* 空状态 */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--space-lg);
+}

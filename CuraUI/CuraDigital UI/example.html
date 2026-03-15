@@ -1,0 +1,478 @@
+import React, { useState } from 'react';
+import { 
+  Home, LayoutDashboard, Users, Settings, FileText, Stethoscope, 
+  Clock, Building2, ChevronDown, LogOut, ChevronRight, HeartPulse,
+  Search, Download, Plus, Mail, Phone, MapPin, X, PhoneOff
+} from 'lucide-react';
+
+// --- 常用通用组件 ---
+
+const Badge = ({ children, color = "gray" }) => {
+  const colors = {
+    red: "bg-red-500 text-white",
+    teal: "bg-teal-500 text-white",
+    gray: "bg-gray-100 text-gray-600 border border-gray-200",
+    white: "bg-white text-gray-400 border border-gray-200"
+  };
+  return (
+    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${colors[color]}`}>
+      {children}
+    </span>
+  );
+};
+
+const Accordion = ({ title, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  return (
+    <div className="border border-gray-100 rounded-xl bg-white mb-4 overflow-hidden shadow-sm">
+      <div 
+        className="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h3 className="text-sm font-bold text-gray-700">{title}</h3>
+        <ChevronDown size={18} className={`text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+      {isOpen && <div className="p-4 border-t border-gray-50 bg-white">{children}</div>}
+    </div>
+  );
+};
+
+// --- 视图 1: Dashboard (第一张图) ---
+
+const StatusCard = ({ label, value, color, icon: Icon }) => {
+  const colorMap = {
+    orange: "bg-orange-50 border-orange-100",
+    green: "bg-teal-50 border-teal-100",
+    purple: "bg-purple-50 border-purple-100",
+  };
+  const iconBgMap = {
+    orange: "bg-orange-200 text-orange-600",
+    green: "bg-teal-200 text-teal-600",
+    purple: "bg-purple-200 text-purple-600",
+  };
+  return (
+    <div className={`flex items-center justify-between p-4 rounded-xl border ${colorMap[color]} shadow-sm flex-1 min-w-[200px]`}>
+      <div className={`p-2.5 rounded-full ${iconBgMap[color]}`}><Icon size={20} /></div>
+      <div className="text-right">
+        <p className="text-xs text-gray-500 font-medium">{label}</p>
+        <p className="text-2xl font-bold text-gray-800">{value}</p>
+      </div>
+    </div>
+  );
+};
+
+const SedeCard = ({ title }) => (
+  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+    <div className="flex items-center gap-2 mb-4">
+      <div className="p-1.5 bg-teal-50 text-teal-600 rounded-lg"><Building2 size={18} /></div>
+      <h3 className="font-bold text-gray-800">{title}</h3>
+    </div>
+    <div className="space-y-2.5">
+      {["Atenciones en Espera", "Atenciones en Triage", "Atenciones en Aprobación", "En Atención", "Atenciones por Egreso"].map((label, idx) => (
+        <div key={idx} className="flex justify-between text-xs">
+          <span className="text-gray-500">{label}</span>
+          <span className="font-bold text-gray-700">{[25, 9, 20, 5, 65][idx]}</span>
+        </div>
+      ))}
+    </div>
+    <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between text-[10px] font-bold uppercase">
+      <div className="flex items-center gap-1"><span className="text-gray-400">Total Particulares:</span><span className="text-gray-700">25</span></div>
+      <div className="flex items-center gap-1"><span className="text-gray-400">Total Paquetes:</span><span className="text-gray-700">39</span></div>
+    </div>
+  </div>
+);
+
+const DashboardView = () => (
+  <>
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <h1 className="text-2xl font-extrabold text-gray-800">Dashboard Centralizado</h1>
+      <div className="flex gap-3">
+        {["Atenciones Particulares 38", "Atenciones Paquetes 108"].map((text, i) => (
+          <div key={i} className="px-4 py-1.5 bg-teal-50 text-teal-700 rounded-full border border-teal-100 text-xs font-bold">
+            {text.split(' ').slice(0, 2).join(' ')} <span className="text-base ml-1">{text.split(' ').pop()}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="flex flex-wrap gap-4 mb-8">
+      <StatusCard label="Atenciones en Espera" value="8.035" color="orange" icon={Clock} />
+      <StatusCard label="Atenciones en Triage" value="2.035" color="green" icon={Clock} />
+      <StatusCard label="Atenciones en Aprobación" value="15.035" color="orange" icon={Clock} />
+      <StatusCard label="En Atención" value="28.035" color="purple" icon={Clock} />
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {[1, 2, 3, 4, 5, 6, 7].map(i => <SedeCard key={i} title="Sede" />)}
+      <div className="bg-gray-50/50 border border-dashed border-gray-200 rounded-xl flex items-center justify-center p-5 min-h-[240px]">
+        <p className="text-gray-400 text-xs italic">Próximo s...</p>
+      </div>
+    </div>
+  </>
+);
+
+// --- 视图 2: Reports (第二张图) ---
+
+const ReportsView = () => {
+  const filters = ["Servicios", "Clientes", "Procedencia", "Estatus", "Fecha", "Hora"];
+  const tableData = Array(10).fill({
+    id: "0001122",
+    cliente: "Venemergencia",
+    contratante: "Iberoconsul C.A",
+    fecha: "11/02/2022",
+    hora: "7:35",
+    operador: "Juan Milán",
+    nombre: "Rosalia Carol Pérez Jimenez",
+    ci: "5233230"
+  });
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-extrabold text-gray-800">Reportes de servicios</h1>
+      
+      {/* Search and Filters */}
+      <div className="flex flex-wrap gap-3 items-center">
+        <div className="relative flex-1 min-w-[300px]">
+          <input 
+            type="text" 
+            placeholder="Buscar por número de atención o reporte" 
+            className="w-full pl-4 pr-10 py-2 bg-white border border-gray-200 rounded-lg text-xs outline-none focus:border-teal-500"
+          />
+          <Search className="absolute right-3 top-2.5 text-gray-400" size={16} />
+        </div>
+        <button className="p-2 bg-teal-500 text-white rounded-lg"><Search size={18}/></button>
+      </div>
+
+      <div className="flex flex-wrap gap-3 items-center">
+        {filters.map(f => (
+          <div key={f} className="flex items-center justify-between px-3 py-2 bg-white border border-gray-200 rounded-lg min-w-[120px] text-[10px] text-gray-500 font-medium">
+            {f} <ChevronDown size={14} />
+          </div>
+        ))}
+        <button className="p-2 border border-teal-500 text-teal-600 rounded-lg"><Download size={18}/></button>
+        <button className="px-6 py-2 bg-teal-500 text-white rounded-lg text-xs font-bold ml-auto uppercase tracking-wide">Generar reporte</button>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-gray-50 text-[10px] uppercase text-gray-400 font-bold border-b border-gray-100">
+              <th className="p-4">Número de atención</th>
+              <th className="p-4">Cliente</th>
+              <th className="p-4">Contratante</th>
+              <th className="p-4">Fecha/Hora inicio</th>
+              <th className="p-4">Tiempo total</th>
+              <th className="p-4">Operador</th>
+              <th className="p-4">Nombres y Apellidos</th>
+              <th className="p-4">CI</th>
+            </tr>
+          </thead>
+          <tbody className="text-[10px]">
+            {tableData.map((row, i) => (
+              <tr key={i} className={`border-b border-gray-50 ${i % 3 === 1 ? 'bg-teal-50/50' : i % 3 === 2 ? 'bg-red-50/50' : 'bg-white'}`}>
+                <td className="p-4 font-bold text-gray-600">{row.id}</td>
+                <td className="p-4">{row.cliente}</td>
+                <td className="p-4">{row.contratante}</td>
+                <td className="p-4">{row.fecha} {row.hora}</td>
+                <td className="p-4">1:45:10</td>
+                <td className="p-4">{row.operador}</td>
+                <td className="p-4 font-medium">{row.nombre}</td>
+                <td className="p-4">{row.ci}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// --- 视图 3 & 4: Patient Detail (第三、四张图) ---
+
+const DetailView = () => {
+  const timelineData = [
+    { code: "OMT", title: "Orientación Médica Telefónica", date: "26 Octubre 19:30", color: "teal", steps: ["Inicio", "Fin"] },
+    { code: "AMD", title: "Atención Médica Domiciliaria", date: "26 Octubre 19:20", color: "orange", steps: ["Asignado", "Salida de base", "Llegada a domicilio", "Salida de domicilio", "Llegada a la base"] },
+    { code: "TLD", title: "Traslado", date: "26 Octubre 19:20", color: "orange", steps: ["Creado", "Asignado", "Salida de base", "Llegada al origen", "Llegada a la base"] }
+  ];
+
+  return (
+    <div className="space-y-6 max-w-7xl mx-auto">
+      {/* Detail Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-1 cursor-pointer hover:bg-gray-100 rounded"><ChevronRight className="rotate-180 text-gray-400" size={20}/></div>
+          <h1 className="text-xl font-bold text-gray-800">Atención #0001122</h1>
+        </div>
+        <div className="flex gap-2">
+          <Badge color="red">OMT</Badge>
+          <Badge color="white">AMD</Badge>
+          <Badge color="white">LEL</Badge>
+          <Badge color="white">EMB</Badge>
+          <Badge color="white">DMV</Badge>
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left: Forms */}
+        <div className="flex-1 space-y-4">
+          <div className="mb-6">
+            <h2 className="text-3xl font-extrabold text-gray-900">Clara Campoamor Roosevelt</h2>
+            <div className="flex items-center gap-1 text-gray-400 text-xs mt-1">
+              <MapPin size={14}/> <span>Quinta Casa Cortés, Piso PB, Urbanización Altamira</span>
+            </div>
+          </div>
+
+          <Accordion title="Información de atención">
+             <div className="grid grid-cols-2 gap-4">
+               <div>
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Fecha de creación</label>
+                 <div className="mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs">06/10/2021</div>
+               </div>
+               <div>
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Creado por</label>
+                 <div className="mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs">Juan Millán</div>
+               </div>
+             </div>
+          </Accordion>
+
+          <Accordion title="Información de afiliado" defaultOpen>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+               <div className="col-span-full">
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Nombres y Apellidos</label>
+                 <input className="w-full mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs outline-none" defaultValue="Clara Campoamor Roosevelt" />
+               </div>
+               <div>
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Fecha de nacimiento</label>
+                 <div className="flex gap-2">
+                   <input className="flex-1 mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs" defaultValue="01/02/1982" />
+                   <input className="w-16 mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs text-center" defaultValue="39" />
+                 </div>
+               </div>
+               <div>
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Sexo</label>
+                 <input className="w-full mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs" defaultValue="Femenina" />
+               </div>
+               <div className="col-span-full">
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Dirección de servicio</label>
+                 <input className="w-full mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs" defaultValue="Quinta Casa Cortés, Piso PB, Urbanización Altamira, Caracas, VE" />
+               </div>
+               <div className="col-span-full">
+                 <label className="text-[10px] text-gray-400 font-bold uppercase">Correo electrónico</label>
+                 <div className="flex gap-2 items-center">
+                    <input className="flex-1 mt-1 p-2 bg-gray-50 border border-gray-100 rounded text-xs" defaultValue="clara@gmail.com" />
+                    <div className="p-2 border border-gray-200 rounded text-gray-400"><Mail size={16}/></div>
+                 </div>
+               </div>
+            </div>
+            
+            <div className="mt-6">
+               <p className="text-[10px] text-gray-400 font-bold uppercase mb-2">Detalles de habitación</p>
+               <div className="flex flex-wrap gap-4">
+                  {['Ascensor', 'Resguardo Unidad', 'Servicio eléctrico', 'Precipitaciones'].map((item, i) => (
+                    <label key={item} className="flex items-center gap-2 cursor-pointer">
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center ${i < 3 ? 'bg-teal-500 border-teal-500 text-white' : 'bg-white border-gray-300'}`}>
+                        {i < 3 && <Plus size={12} className="rotate-45" strokeWidth={4}/>}
+                      </div>
+                      <span className="text-xs text-gray-600">{item}</span>
+                    </label>
+                  ))}
+               </div>
+            </div>
+          </Accordion>
+
+          <Accordion title="Historial de atenciones" />
+          <Accordion title="Documentos adjuntos" />
+          
+          <div className="p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+            <h4 className="text-xs font-bold text-gray-500 mb-1">Reposo médico</h4>
+            <p className="text-[10px] text-gray-400 italic">Una vez guardada esta información se generará un reposo médico.</p>
+          </div>
+        </div>
+
+        {/* Right: Timeline Sidebar */}
+        <div className="w-full lg:w-80 space-y-6">
+          {/* Action Box */}
+          <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+             <div className="flex gap-2">
+               <input placeholder="Correo electrónico" className="flex-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded text-xs outline-none" />
+               <button className="px-4 py-2 bg-gray-400 text-white font-bold rounded text-xs uppercase">Enviar</button>
+             </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <h3 className="font-bold text-gray-800 mb-6">Servicios</h3>
+            <div className="space-y-10">
+              {timelineData.map((service, idx) => (
+                <div key={idx} className="relative">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <span className="text-xs font-black text-gray-900 mr-2">{service.code}</span>
+                      <span className="text-[10px] text-gray-400 font-medium">{service.title}</span>
+                    </div>
+                    <span className="text-[10px] text-gray-400 font-bold">{service.date}</span>
+                  </div>
+                  
+                  {/* Visual Timeline */}
+                  <div className="relative h-1 bg-gray-100 rounded-full flex justify-between items-center mt-6">
+                    <div className={`absolute top-0 left-0 h-full rounded-full ${service.color === 'teal' ? 'bg-teal-500 w-full' : 'bg-orange-300 w-1/2'}`} />
+                    {service.steps.map((step, sIdx) => (
+                      <div key={step} className="relative flex flex-col items-center">
+                        <div className={`w-3 h-3 rounded-full border-2 border-white z-10 shadow-sm ${
+                           service.color === 'teal' ? 'bg-teal-500' : (sIdx < 3 ? 'bg-orange-400' : 'bg-gray-300')
+                        }`} />
+                        <span className="absolute top-5 text-[8px] text-gray-400 font-bold whitespace-nowrap text-center uppercase leading-tight w-0">
+                          {step}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- 通用界面布局 (SideBar + Content) ---
+
+const App = () => {
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'reports', 'detail'
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeSubmenu, setActiveSubmenu] = useState('dashboards');
+
+  return (
+    <div className="flex min-h-screen bg-[#F8FAFB] font-sans text-gray-900">
+      {/* Incoming Call Popup (View 4 implementation) */}
+      <div className="fixed bottom-6 right-6 z-50 animate-bounce-subtle">
+        <div className="bg-white p-4 rounded-xl shadow-2xl border border-gray-100 w-64">
+           <div className="flex justify-between items-start mb-3">
+              <h4 className="text-xs font-bold text-gray-800">Llamada entrante</h4>
+              <X size={14} className="text-gray-300 cursor-pointer" />
+           </div>
+           <div className="bg-teal-500 text-white rounded-lg py-1.5 text-center font-bold text-sm mb-2">
+              4:40
+           </div>
+           <button className="w-full bg-red-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-red-600 transition-colors">
+              <PhoneOff size={16} />
+           </button>
+        </div>
+      </div>
+
+      {/* Sidebar */}
+      <aside className="w-64 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen shrink-0">
+        <div className="p-6 flex items-center gap-2">
+          <div className="text-teal-600"><Stethoscope size={28} strokeWidth={2.5} /></div>
+          <span className="text-xl font-bold tracking-tight">Cura<span className="text-teal-500">Digital</span></span>
+        </div>
+
+        <div className="px-4 mb-6">
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+            <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center text-white font-bold">DM</div>
+            <div>
+              <p className="text-sm font-bold text-gray-800 leading-none">Daniel Martínez</p>
+              <p className="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-tighter">Administrador Consejo</p>
+            </div>
+          </div>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto">
+          <div className="px-4 py-2 flex items-center gap-3 text-gray-400 cursor-pointer hover:bg-gray-50 rounded-lg mx-2">
+            <Home size={18} /> <span className="text-sm font-medium">Home</span>
+          </div>
+
+          {/* Dashboards Menu */}
+          <div className="mt-1">
+             <div 
+               onClick={() => setActiveSubmenu(activeSubmenu === 'dashboards' ? '' : 'dashboards')}
+               className={`flex items-center justify-between px-4 py-2.5 mx-2 rounded-lg cursor-pointer ${currentView === 'dashboard' ? 'bg-teal-50/50 text-teal-600 font-bold' : 'text-gray-500'}`}
+             >
+               <div className="flex items-center gap-3">
+                 <LayoutDashboard size={18} />
+                 <span className="text-sm">Dashboards</span>
+               </div>
+               <ChevronDown size={14} className={activeSubmenu === 'dashboards' ? 'rotate-180' : ''} />
+             </div>
+             {activeSubmenu === 'dashboards' && (
+               <div className="ml-8 mt-1 space-y-1">
+                  <div onClick={() => setCurrentView('dashboard')} className={`text-xs p-2 cursor-pointer rounded-l-lg ${currentView === 'dashboard' ? 'bg-teal-50 text-teal-600 border-l-2 border-teal-500 font-bold' : 'text-gray-400 hover:text-teal-500'}`}>Centralizado</div>
+                  <div className="text-xs p-2 text-gray-400 hover:text-teal-500 cursor-pointer">Urgent Care</div>
+               </div>
+             )}
+          </div>
+
+          {/* Reports Menu */}
+          <div className="mt-1">
+             <div 
+               onClick={() => setActiveSubmenu(activeSubmenu === 'reports' ? '' : 'reports')}
+               className={`flex items-center justify-between px-4 py-2.5 mx-2 rounded-lg cursor-pointer ${currentView === 'reports' ? 'bg-teal-50/50 text-teal-600 font-bold' : 'text-gray-500'}`}
+             >
+               <div className="flex items-center gap-3">
+                 <FileText size={18} />
+                 <span className="text-sm">Reportes</span>
+               </div>
+               <ChevronDown size={14} className={activeSubmenu === 'reports' ? 'rotate-180' : ''} />
+             </div>
+             {activeSubmenu === 'reports' && (
+               <div className="ml-8 mt-1 space-y-1">
+                  <div onClick={() => setCurrentView('reports')} className={`text-xs p-2 cursor-pointer rounded-l-lg ${currentView === 'reports' ? 'bg-teal-50 text-teal-600 border-l-2 border-teal-500 font-bold' : 'text-gray-400 hover:text-teal-500'}`}>Reportes de servicios</div>
+               </div>
+             )}
+          </div>
+
+          {/* Atenciones Menu */}
+          <div className="mt-1">
+             <div 
+               onClick={() => setActiveSubmenu(activeSubmenu === 'atenciones' ? '' : 'atenciones')}
+               className={`flex items-center justify-between px-4 py-2.5 mx-2 rounded-lg cursor-pointer ${currentView === 'detail' ? 'bg-teal-50/50 text-teal-600 font-bold' : 'text-gray-500'}`}
+             >
+               <div className="flex items-center gap-3">
+                 <Users size={18} />
+                 <span className="text-sm">Atenciones</span>
+               </div>
+               <ChevronDown size={14} className={activeSubmenu === 'atenciones' ? 'rotate-180' : ''} />
+             </div>
+             {activeSubmenu === 'atenciones' && (
+               <div className="ml-8 mt-1 space-y-1">
+                  <div onClick={() => setCurrentView('detail')} className={`text-xs p-2 cursor-pointer rounded-l-lg ${currentView === 'detail' ? 'bg-teal-50 text-teal-600 border-l-2 border-teal-500 font-bold' : 'text-gray-400 hover:text-teal-500'}`}>Listado de atenciones</div>
+               </div>
+             )}
+          </div>
+        </nav>
+
+        <div className="p-4 border-t border-gray-50">
+          <button className="flex items-center gap-3 px-4 py-2 w-full text-gray-500 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-tighter">
+            <div className="p-1 border border-gray-200 rounded"><LogOut size={12} /></div>
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-8 overflow-y-auto bg-[#F8FAFB]">
+        {/* Breadcrumbs */}
+        <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-gray-400 mb-6 tracking-widest">
+          <span>{currentView === 'dashboard' ? 'Dashboards' : currentView === 'reports' ? 'Reportes' : 'Atenciones'}</span>
+          <ChevronRight size={10} />
+          <span className="text-gray-500">
+            {currentView === 'dashboard' ? 'Dashboard Centralizado' : currentView === 'reports' ? 'Reportes de servicios' : 'Listado de atenciones'}
+          </span>
+        </div>
+
+        {/* Dynamic View Rendering */}
+        {currentView === 'dashboard' && <DashboardView />}
+        {currentView === 'reports' && <ReportsView />}
+        {currentView === 'detail' && <DetailView />}
+      </main>
+
+      {/* Page Footer decoration */}
+      <div className="fixed bottom-0 left-64 right-0 h-1 bg-gray-100">
+        <div className={`h-full transition-all duration-500 bg-teal-500 ${currentView === 'dashboard' ? 'w-1/4' : currentView === 'reports' ? 'w-2/4' : 'w-3/4'}`} />
+      </div>
+    </div>
+  );
+};
+
+export default App;

@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Example - CuraDigital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           CURADIGITAL DESIGN SYSTEM
+           严格遵循以下CSS规范
+           ======================================== */
+        
+        /* 1. CSS变量定义 */
+        :root {
+            /* 主色调 */
+            --primary: #5CB8A6;
+            --primary-light: #E8F5F2;
+            --primary-dark: #4A9A8A;
+            
+            /* 中性色 */
+            --background: #F8F9FA;
+            --white: #FFFFFF;
+            --border: #E8E8E8;
+            --divider: #F0F0F0;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            
+            /* 状态色 */
+            --success: #27AE60;
+            --warning: #F39C12;
+            --error: #E74C3C;
+            --info: #2196F3;
+            --purple: #9C27B0;
+            
+            /* 表格行颜色 */
+            --row-green: #E8F5E9;
+            --row-red: #FFEBEE;
+            
+            /* 图标背景色 */
+            --icon-blue-bg: #E3F2FD;
+            --icon-green-bg: #E8F5E9;
+            --icon-orange-bg: #FFF3E0;
+            --icon-purple-bg: #F3E5F5;
+            
+            /* 圆角 */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 10px;
+            --radius-xl: 12px;
+            --radius-pill: 20px;
+            
+            /* 阴影 */
+            --shadow-card: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-modal: 0 8px 32px rgba(0,0,0,0.15);
+            
+            /* 间距 */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 24px;
+            --space-3xl: 32px;
+            
+            /* 侧边栏 */
+            --sidebar-width: 260px;
+        }
+        
+        /* 2. 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        /* 3. 布局容器 */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* ========================================
+           4. 侧边栏组件 (Sidebar)
+           ======================================== */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        /* Logo区域 */
+        .logo {
+            padding: var(--space-2xl) var(--space-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* 用户信息 */
+        .user-info {
+            padding: 0 var(--space-xl) var(--space-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        
+        .user-role {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* 导航菜单 */
+        .nav-menu {
+            flex: 1;
+            padding: 0 var(--space-md);
+        }
+        
+        .nav-item {
+            padding: 10px var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            margin-bottom: 2px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            background: #F5F5F5;
+        }
+        
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        
+        .nav-expand {
+            margin-left: auto;
+            transition: transform 0.2s ease;
+        }
+        
+        .nav-expand.expanded {
+            transform: rotate(180deg);
+        }
+        
+        /* 子菜单 */
+        .nav-submenu {
+            padding-left: 40px;
+        }
+        
+        .nav-submenu-item {
+            padding: 8px var(--space-md);
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .nav-submenu-item:hover {
+            background: #F5F5F5;
+        }
+        
+        .nav-submenu-item.active {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        /* 退出登录 */
+        .logout {
+            padding: var(--space-lg) var(--space-xl);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .logout:hover {
+            color: var(--text-primary);
+        }
+        
+        /* ========================================
+           5. 主内容区域
+           ======================================== */
+        .main-content {
+            flex: 1;
+            padding: var(--space-2xl) var(--space-3xl);
+            overflow-y: auto;
+        }
+        
+        /* 面包屑 */
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: var(--space-md);
+        }
+        
+        /* 页面标题 */
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        /* ========================================
+           6. 卡片组件
+           ======================================== */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-card);
+        }
+        
+        /* 统计卡片 */
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .stat-icon.blue { background: var(--icon-blue-bg); }
+        .stat-icon.green { background: var(--icon-green-bg); }
+        .stat-icon.orange { background: var(--icon-orange-bg); }
+        .stat-icon.purple { background: var(--icon-purple-bg); }
+        
+        .stat-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        /* Sede卡片 */
+        .sede-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .sede-card .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .sede-card .card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--divider);
+            font-size: 13px;
+        }
+        
+        .sede-card .card-row:last-of-type {
+            border-bottom: none;
+        }
+        
+        .sede-card .row-label {
+            color: var(--text-secondary);
+        }
+        
+        .sede-card .row-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .sede-card .card-footer {
+            display: flex;
+            gap: var(--space-lg);
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--divider);
+        }
+        
+        .sede-card .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+        
+        .sede-card .footer-label {
+            color: var(--text-muted);
+        }
+        
+        .sede-card .footer-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* ========================================
+           7. 按钮组件
+           ======================================== */
+        .btn {
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            padding: 10px 24px;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-secondary {
+            background: #BDC3C7;
+            color: var(--white);
+            padding: 12px 32px;
+        }
+        
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+        }
+        
+        .btn-icon-green {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        /* 状态标签 */
+        .status-tag {
+            padding: 6px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-tag.red { background: var(--error); color: var(--white); }
+        .status-tag.orange { background: var(--warning); color: var(--white); }
+        .status-tag.green { background: var(--success); color: var(--white); }
+        .status-tag.teal { background: #1ABC9C; color: var(--white); }
+        .status-tag.outline-green {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .status-tag.outline-gray {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+        
+        /* ========================================
+           8. 输入框组件
+           ======================================== */
+        .form-input {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            background: var(--background);
+            color: var(--text-primary);
+            width: 100%;
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 0 var(--space-lg);
+            border: 1px solid var(--border);
+            height: 44px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 0;
+            font-size: 14px;
+            outline: none;
+            background: transparent;
+        }
+        
+        /* ========================================
+           9. 表格组件
+           ======================================== */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        .data-table th {
+            background: var(--background);
+            padding: 14px var(--space-lg);
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .data-table td {
+            padding: 14px var(--space-lg);
+            border-bottom: 1px solid var(--divider);
+            color: var(--text-primary);
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* 表格行颜色交替 */
+        .data-table tbody tr:nth-child(6n+1),
+        .data-table tbody tr:nth-child(6n+4) {
+            background: var(--white);
+        }
+        
+        .data-table tbody tr:nth-child(6n+2),
+        .data-table tbody tr:nth-child(6n+5) {
+            background: var(--row-green);
+        }
+        
+        .data-table tbody tr:nth-child(6n+3),
+        .data-table tbody tr:nth-child(6n) {
+            background: var(--row-red);
+        }
+        
+        /* ========================================
+           10. 手风琴组件
+           ======================================== */
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .accordion-item {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+        
+        .accordion-header {
+            padding: 16px var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .accordion-header svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+        
+        .accordion-item.expanded .accordion-header svg {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            padding: 0 var(--space-xl) var(--space-xl);
+        }
+        
+        /* ========================================
+           11. 进度条组件
+           ======================================== */
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .progress-step {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: #E0E0E0;
+        }
+        
+        .progress-step.active {
+            background: var(--primary);
+        }
+        
+        .progress-step.orange {
+            background: var(--warning);
+        }
+        
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+        
+        .progress-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            flex: 1;
+        }
+        
+        .progress-label.active {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .progress-label.orange {
+            color: var(--warning);
+        }
+        
+        /* ========================================
+           12. 弹窗组件
+           ======================================== */
+        .call-popup {
+            position: fixed;
+            bottom: var(--space-2xl);
+            right: var(--space-2xl);
+            width: 280px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-modal);
+            overflow: hidden;
+            z-index: 1000;
+        }
+        
+        .call-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg) var(--space-lg) var(--space-sm);
+        }
+        
+        .call-popup-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .call-popup-close {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        
+        .call-timer {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+            padding-bottom: var(--space-sm);
+        }
+        
+        .call-popup-actions {
+            padding: var(--space-md) var(--space-lg) var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .call-btn {
+            padding: 12px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            color: var(--white);
+        }
+        
+        .call-btn.accept {
+            background: var(--primary);
+        }
+        
+        .call-btn.decline {
+            background: var(--error);
+        }
+        
+        /* ========================================
+           13. 分页组件
+           ======================================== */
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-2xl);
+        }
+        
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #E0E0E0;
+        }
+        
+        .pagination-dot.active {
+            background: var(--primary);
+        }
+        
+        .pagination-progress {
+            width: 400px;
+            height: 6px;
+            background: #E0E0E0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .pagination-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        /* ========================================
+           14. 布局工具类
+           ======================================== */
+        .flex {
+            display: flex;
+        }
+        
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+        }
+        
+        .grid-2-1 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-2xl);
+        }
+        
+        .gap-12 {
+            gap: var(--space-md);
+        }
+        
+        .gap-16 {
+            gap: var(--space-lg);
+        }
+        
+        .mb-24 {
+            margin-bottom: var(--space-2xl);
+        }
+        
+        /* ========================================
+           15. 页面特定样式
+           ======================================== */
+        
+        /* 统计标签 */
+        .stats-tabs {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .stat-tab {
+            padding: 12px var(--space-xl);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .stat-tab:first-child {
+            background: var(--white);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        
+        .stat-tab:last-child {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .stat-tab .number {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        /* 筛选器 */
+        .filter-dropdown {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 10px var(--space-lg);
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        /* 患者头部 */
+        .patient-header {
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .patient-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .patient-address {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        /* 邮件发送区 */
+        .email-section {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        /* 服务面板 */
+        .services-panel {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-card);
+        }
+        
+        .services-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .service-item {
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .service-code {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .service-name {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .service-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* 医疗休息区 */
+        .medical-rest {
+            background: var(--background);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+        
+        .medical-rest-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .medical-rest-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .medical-rest-link {
+            font-size: 13px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* 复选框组 */
+        .checkbox-group {
+            display: flex;
+            gap: var(--space-xl);
+            margin-top: var(--space-sm);
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .checkbox-item.checked {
+            color: var(--primary);
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+                    <path d="M16 4C12 4 8 6 8 10C8 14 12 16 16 16C20 16 24 14 24 10C24 6 20 4 16 4Z" fill="#5CB8A6"/>
+                    <path d="M16 16V28" stroke="#5CB8A6" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M10 22H22" stroke="#5CB8A6" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="24" cy="8" r="4" fill="#5CB8A6"/>
+                </svg>
+                <span class="logo-text">CuraDigital</span>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">DM</div>
+                <div>
+                    <div class="user-name">Daniel Martinez</div>
+                    <div style="font-size:12px;color:#999;">Administrador</div>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Dashboards</span>
+                    <svg class="nav-expand expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                <div class="nav-submenu">
+                    <div class="nav-submenu-item active">Centralizado</div>
+                    <div class="nav-submenu-item">Urgent Care</div>
+                    <div class="nav-submenu-item">DAV</div>
+                </div>
+            </nav>
+            
+            <div class="logout">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span>Cerrar sesión</span>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="main-content">
+            <div class="breadcrumb">Dashboards / Dashboard Centralizado</div>
+            <h1 class="page-title">Design System Example</h1>
+            
+            <!-- 统计卡片示例 -->
+            <div class="grid-4 mb-24">
+                <div class="card stat-card">
+                    <div class="stat-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-label">Atenciones en Espera</div>
+                        <div class="stat-value">8.035</div>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="stat-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-label">Atenciones en Triaje</div>
+                        <div class="stat-value">2.035</div>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="stat-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-label">Atenciones en Aprobación</div>
+                        <div class="stat-value">15.035</div>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="stat-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#9C27B0" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-label">En Atención</div>
+                        <div class="stat-value">28.035</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sede卡片示例 -->
+            <div class="grid-4 mb-24">
+                <div class="card sede-card">
+                    <div class="card-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5CB8A6" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="card-title">Sede</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">Atenciones en Espera</span>
+                        <span class="row-value">25</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">Atenciones en Triaje</span>
+                        <span class="row-value">9</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">Atenciones en Aprobación</span>
+                        <span class="row-value">20</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">En Atención</span>
+                        <span class="row-value">5</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="row-label">Atenciones por Egresar</span>
+                        <span class="row-value">65</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="footer-item">
+                            <span class="footer-label">Total Particulares</span>
+                            <span class="footer-value">25</span>
+                        </div>
+                        <div class="footer-item">
+                            <span class="footer-label">Total Paquetes</span>
+                            <span class="footer-value">39</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 按钮示例 -->
+            <div class="card mb-24" style="display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <span class="status-tag red">CMF</span>
+                <span class="status-tag orange">AMD</span>
+                <span class="status-tag green">TLD</span>
+                <span class="status-tag outline-green">Outline</span>
+            </div>
+            
+            <!-- 手风琴示例 -->
+            <div class="accordion mb-24" style="max-width:600px;">
+                <div class="accordion-item expanded">
+                    <div class="accordion-header">
+                        <span>Información de atención</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="accordion-content">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                            <div>
+                                <label style="font-size:13px;color:#666;display:block;margin-bottom:6px;">Fecha de creación</label>
+                                <input type="text" class="form-input" value="06/10/2021" readonly>
+                            </div>
+                            <div>
+                                <label style="font-size:13px;color:#666;display:block;margin-bottom:6px;">Creado por</label>
+                                <input type="text" class="form-input" value="Juan Millan" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 进度条示例 -->
+            <div class="card mb-24" style="max-width:500px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-weight:700;font-size:14px;">OMT</span>
+                    <span style="font-size:12px;color:#999;">29 Octubre 10:30</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                    <div class="progress-step"></div>
+                </div>
+                <div class="progress-labels">
+                    <span class="progress-label active">Creado</span>
+                    <span class="progress-label active">Asignado</span>
+                    <span class="progress-label active">En ruta</span>
+                    <span class="progress-label">En atención</span>
+                    <span class="progress-label">Finalizado</span>
+                </div>
+            </div>
+            
+            <!-- 分页示例 -->
+            <div class="pagination-dots">
+                <div class="pagination-dot active"></div>
+                <div class="pagination-dot"></div>
+                <div class="pagination-dot"></div>
+                <div class="pagination-dot"></div>
+                <div class="pagination-dot"></div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 来电弹窗示例 -->
+    <div class="call-popup">
+        <div class="call-popup-header">
+            <span class="call-popup-title">Llamada entrante</span>
+            <div class="call-popup-close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </div>
+        </div>
+        <div class="call-timer">4:40</div>
+        <div class="call-popup-actions">
+            <button class="call-btn accept">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                Contestar
+            </button>
+            <button class="call-btn decline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                    <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91"/>
+                    <line x1="23" y1="1" x2="1" y2="23"/>
+                </svg>
+                Rechazar
+            </button>
+        </div>
+    </div>
+</body>
+</html>
