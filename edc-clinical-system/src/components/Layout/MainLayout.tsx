@@ -20,6 +20,7 @@ export default function MainLayout() {
 
     if (path === '/') return undefined // Dashboard has no breadcrumb
     if (path === '/projects') return [{ label: '项目管理', path: '/projects' }]
+    if (path === '/projects/new') return [{ label: '项目管理', path: '/projects' }, { label: '新建项目' }]
     if (path.startsWith('/projects/') && !path.includes('/subjects')) {
       return [
         { label: '项目管理', path: '/projects' },
@@ -44,6 +45,9 @@ export default function MainLayout() {
       ]
     }
     if (path === '/queries') return [{ label: '质疑管理', path: '/queries' }]
+    if (path === '/dictionary') return [{ label: '系统配置', path: '/config' }, { label: '标准字典库' }]
+    if (path === '/projects/audit') return [{ label: '项目管理', path: '/projects' }, { label: '项目审核' }]
+    if (path === '/crf-templates') return [{ label: 'CRF管理', path: '/crf-designer' }, { label: '模板市场' }]
     if (path.startsWith('/queries/')) {
       return [
         { label: '质疑管理', path: '/queries' },
@@ -52,6 +56,16 @@ export default function MainLayout() {
     }
     if (path === '/export') return [{ label: '数据导出', path: '/export' }]
     if (path === '/config') return [{ label: '系统配置', path: '/config' }]
+    if (path.startsWith('/config/')) {
+      const configSubPath = path.replace('/config/', '')
+      const subLabels: Record<string, string> = {
+        roles: '角色权限',
+        centers: '中心管理',
+        views: '数据视图',
+        workflow: '审核流程',
+      }
+      return [{ label: '系统配置', path: '/config' }, { label: subLabels[configSubPath] || '配置' }]
+    }
     if (path === '/logs') return [{ label: '系统日志', path: '/logs' }]
     return []
   }

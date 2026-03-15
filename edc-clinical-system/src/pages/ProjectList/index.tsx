@@ -170,7 +170,7 @@ export default function ProjectList() {
       <PageHeader
         title="项目管理"
         actions={
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/projects/new')}>
             新建项目
           </Button>
         }

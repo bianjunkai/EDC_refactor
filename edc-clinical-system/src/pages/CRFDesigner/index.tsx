@@ -47,7 +47,6 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { mockCRFTemplates } from '@/utils/mockData'
 import PageHeader from '@/components/Common/PageHeader'
-import { getTableRowClassName } from '@/constants/theme'
 import type { CRFField, FieldType, CRFSection } from '@/types'
 import styles from './styles.module.css'
 
@@ -84,10 +83,27 @@ const createDefaultField = (type: FieldType): CRFField => ({
   placeholder: '请输入',
 })
 
+// CRF列表数据
+interface CRFItem {
+  id: string
+  name: string
+  code: string
+  status: '已发布' | '编辑中' | '草稿'
+  updateDate: string
+}
+
+const mockCRFList: CRFItem[] = [
+  { id: '1', name: '人口学资料', code: 'DM', status: '已发布', updateDate: '2026-03-10' },
+  { id: '2', name: '既往病史', code: 'MH', status: '已发布', updateDate: '2026-03-10' },
+  { id: '3', name: '体格检查', code: 'PE', status: '编辑中', updateDate: '2026-03-12' },
+  { id: '4', name: '实验室检查', code: 'LB', status: '草稿', updateDate: '2026-03-11' },
+  { id: '5', name: '不良事件', code: 'AE', status: '已发布', updateDate: '2026-03-09' },
+]
+
 export default function CRFDesigner() {
   const navigate = useNavigate()
   const [templateModalVisible, setTemplateModalVisible] = useState(false)
-  const [activeTab, setActiveTab] = useState('controls')
+  const [activeTab, setActiveTab] = useState('crflist')
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null)
   const [previewVisible, setPreviewVisible] = useState(false)
   const [activeSectionId, setActiveSectionId] = useState<string>('section-1')
@@ -508,6 +524,38 @@ export default function CRFDesigner() {
             activeKey={activeTab}
             onChange={setActiveTab}
             items={[
+              {
+                key: 'crflist',
+                label: '表单列表',
+                children: (
+                  <div style={{ padding: 12 }}>
+                    <Button type="primary" block icon={<PlusOutlined />} style={{ marginBottom: 12 }}>
+                      新建表单
+                    </Button>
+                    {mockCRFList.map((crf) => (
+                      <Card
+                        key={crf.id}
+                        size="small"
+                        style={{ marginBottom: 8, cursor: 'pointer' }}
+                        onClick={() => {}}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div>
+                            <div style={{ fontWeight: 500 }}>{crf.name}</div>
+                            <div style={{ fontSize: 12, color: '#999' }}>{crf.code}</div>
+                          </div>
+                          <Tag
+                            color={crf.status === '已发布' ? 'green' : crf.status === '编辑中' ? 'blue' : 'default'}
+                            style={{ margin: 0 }}
+                          >
+                            {crf.status}
+                          </Tag>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                ),
+              },
               {
                 key: 'controls',
                 label: '控件库',

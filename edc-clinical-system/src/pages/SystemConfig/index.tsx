@@ -12,6 +12,7 @@ import {
   Descriptions,
   Tabs,
   Badge,
+  Checkbox,
 } from 'antd'
 import {
   UserOutlined,
@@ -192,14 +193,57 @@ export default function SystemConfig() {
                 新增角色
               </Button>
             </div>
-            <Card>
-              <Descriptions title="系统角色" bordered column={1}>
-                <Descriptions.Item label="研究者">拥有项目数据录入、质疑回复权限</Descriptions.Item>
-                <Descriptions.Item label="研究护士">拥有受试者管理、数据录入权限</Descriptions.Item>
-                <Descriptions.Item label="数据管理员">拥有数据核查、质疑发起权限</Descriptions.Item>
-                <Descriptions.Item label="医学专员">拥有医学审核、方案偏离审查权限</Descriptions.Item>
-                <Descriptions.Item label="项目管理员">拥有项目配置、用户管理权限</Descriptions.Item>
-              </Descriptions>
+            <Card style={{ marginBottom: 16 }}>
+              <Table
+                columns={[
+                  { title: '角色名称', dataIndex: 'name', key: 'name' },
+                  { title: '角色描述', dataIndex: 'description', key: 'description' },
+                  { title: '用户数', dataIndex: 'userCount', key: 'userCount' },
+                  { title: '状态', dataIndex: 'status', key: 'status', render: () => <Tag color="success">启用中</Tag> },
+                  { title: '操作', key: 'action', render: () => <Button type="link" size="small">配置权限</Button> },
+                ]}
+                dataSource={[
+                  { id: '1', name: '系统管理员', description: '系统最高权限', userCount: 2 },
+                  { id: '2', name: '项目管理员', description: '项目配置、用户管理权限', userCount: 5 },
+                  { id: '3', name: '研究者', description: '项目数据录入、质疑回复权限', userCount: 20 },
+                  { id: '4', name: '研究护士', description: '受试者管理、数据录入权限', userCount: 15 },
+                  { id: '5', name: '数据管理员', description: '数据核查、质疑发起权限', userCount: 8 },
+                  { id: '6', name: '医学专员', description: '医学审核、方案偏离审查权限', userCount: 6 },
+                ]}
+                rowKey="id"
+                rowClassName={getTableRowClassName}
+                pagination={false}
+              />
+            </Card>
+            <Card title="权限配置矩阵">
+              <Table
+                columns={[
+                  { title: '模块', dataIndex: 'module', key: 'module' },
+                  { title: '权限项', dataIndex: 'permission', key: 'permission' },
+                  { title: '系统管理员', dataIndex: 'admin', key: 'admin', render: () => <Checkbox checked disabled /> },
+                  { title: '项目管理员', dataIndex: 'pm', key: 'pm', render: () => <Checkbox checked /> },
+                  { title: '研究者', dataIndex: 'researcher', key: 'researcher', render: () => <Checkbox checked /> },
+                  { title: '研究护士', dataIndex: 'nurse', key: 'nurse', render: () => <Checkbox checked /> },
+                ]}
+                dataSource={[
+                  { id: '1', module: '项目管理', permission: '查看项目' },
+                  { id: '2', module: '项目管理', permission: '创建项目' },
+                  { id: '3', module: '项目管理', permission: '编辑项目' },
+                  { id: '4', module: '项目管理', permission: '删除项目' },
+                  { id: '5', module: '受试者管理', permission: '查看受试者' },
+                  { id: '6', module: '受试者管理', permission: '入组操作' },
+                  { id: '7', module: '受试者管理', permission: '编辑受试者' },
+                  { id: '8', module: 'CRF管理', permission: '设计CRF' },
+                  { id: '9', module: 'CRF管理', permission: '发布CRF' },
+                  { id: '10', module: '质疑管理', permission: '发起质疑' },
+                  { id: '11', module: '质疑管理', permission: '回复质疑' },
+                  { id: '12', module: '数据导出', permission: '申请导出' },
+                  { id: '13', module: '数据导出', permission: '审核导出' },
+                ]}
+                rowKey="id"
+                pagination={false}
+                size="small"
+              />
             </Card>
           </div>
         )

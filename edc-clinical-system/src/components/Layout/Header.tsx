@@ -12,6 +12,11 @@ import {
   ExportOutlined,
   FileSearchOutlined,
   CalendarOutlined,
+  DatabaseOutlined,
+  TeamOutlined,
+  AuditOutlined,
+  ApiOutlined,
+  BookOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
@@ -38,17 +43,87 @@ export default function Header({
   const location = useLocation()
   const { checkPermission } = usePermission()
 
-  // 根据权限动态生成导航项
-  const navItems = [
-    { key: '/', icon: <HomeOutlined />, label: '首页', permission: Permission.DASHBOARD_VIEW },
-    { key: '/projects', icon: <ProjectOutlined />, label: '项目管理', permission: Permission.PROJECT_VIEW },
-    { key: '/subjects', icon: <UserOutlined />, label: '受试者管理', permission: Permission.SUBJECT_VIEW },
-    { key: '/crf-designer', icon: <FileTextOutlined />, label: 'CRF管理', permission: Permission.CRF_VIEW },
-    { key: '/visit-config', icon: <CalendarOutlined />, label: '访视配置', permission: Permission.VISIT_CONFIG },
-    { key: '/queries', icon: <QuestionCircleOutlined />, label: '质疑管理', permission: Permission.QUERY_VIEW },
-    { key: '/export', icon: <ExportOutlined />, label: '数据导出', permission: Permission.PROJECT_EXPORT },
-    { key: '/logs', icon: <FileSearchOutlined />, label: '系统日志', permission: Permission.LOG_VIEW },
-  ].filter(item => checkPermission(item.permission))
+  // 根据权限动态生成导航项 - 支持二级菜单
+  const getNavItems = () => {
+    const items: any[] = []
+
+    // 首页
+    if (checkPermission(Permission.DASHBOARD_VIEW)) {
+      items.push({ key: '/', icon: <HomeOutlined />, label: '首页' })
+    }
+
+    // 项目管理 - 含子菜单
+    if (checkPermission(Permission.PROJECT_VIEW)) {
+      items.push({
+        key: 'project-menu',
+        icon: <ProjectOutlined />,
+        label: '项目管理',
+        children: [
+          { key: '/projects', label: '项目列表' },
+          { key: '/projects/audit', label: '项目审核' },
+        ],
+      })
+    }
+
+    // 受试者管理
+    if (checkPermission(Permission.SUBJECT_VIEW)) {
+      items.push({ key: '/subjects', icon: <UserOutlined />, label: '受试者管理' })
+    }
+
+    // CRF管理 - 含子菜单
+    if (checkPermission(Permission.CRF_VIEW)) {
+      items.push({
+        key: 'crf-menu',
+        icon: <FileTextOutlined />,
+        label: 'CRF管理',
+        children: [
+          { key: '/crf-designer', label: '表单设计' },
+          { key: '/crf-templates', label: '模板市场' },
+        ],
+      })
+    }
+
+    // 访视配置
+    if (checkPermission(Permission.VISIT_CONFIG)) {
+      items.push({ key: '/visit-config', icon: <CalendarOutlined />, label: '访视配置' })
+    }
+
+    // 质疑管理
+    if (checkPermission(Permission.QUERY_VIEW)) {
+      items.push({ key: '/queries', icon: <QuestionCircleOutlined />, label: '质疑管理' })
+    }
+
+    // 数据导出
+    if (checkPermission(Permission.PROJECT_EXPORT)) {
+      items.push({ key: '/export', icon: <ExportOutlined />, label: '数据导出' })
+    }
+
+    // 系统配置 - 含子菜单
+    if (checkPermission(Permission.PROJECT_VIEW)) {
+      items.push({
+        key: 'system-menu',
+        icon: <SettingOutlined />,
+        label: '系统配置',
+        children: [
+          { key: '/config', icon: <TeamOutlined />, label: '用户管理' },
+          { key: '/config/roles', icon: <ApiOutlined />, label: '角色权限' },
+          { key: '/config/centers', icon: <ApiOutlined />, label: '中心管理' },
+          { key: '/dictionary', icon: <BookOutlined />, label: '标准字典库' },
+          { key: '/config/views', icon: <DatabaseOutlined />, label: '数据视图' },
+          { key: '/config/workflow', icon: <AuditOutlined />, label: '审核流程' },
+        ],
+      })
+    }
+
+    // 系统日志
+    if (checkPermission(Permission.LOG_VIEW)) {
+      items.push({ key: '/logs', icon: <FileSearchOutlined />, label: '系统日志' })
+    }
+
+    return items
+  }
+
+  const navItems = getNavItems()
 
   const userMenuItems: MenuProps['items'] = [
     {

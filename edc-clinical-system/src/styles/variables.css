@@ -38,7 +38,7 @@
   --color-status-pending-text: #dc2626;
 
   --color-status-processing-bg: #fef3c7;
-  --color-status-processing-text: #b45309; /* 提高对比度 */
+  --color-status-processing-text: #b45309;
 
   --color-status-awaiting-bg: #dbeafe;
   --color-status-awaiting-text: #2563eb;
@@ -57,20 +57,8 @@
 
   /* -------------------- 表格行颜色（三色交替） -------------------- */
   --color-row-even: #FFFFFF;
-  --color-row-alt1: #E8F5E9;  /* 浅绿 - 第2,5,8...行 */
-  --color-row-alt2: #FFEBEE;  /* 浅红 - 第3,6,9...行 */
-}
-
-/* 表格行交替颜色样式 */
-.table-row-alt-1 {
-  background-color: #E8F5E9 !important;
-}
-
-.table-row-alt-2 {
-  background-color: #FFEBEE !important;
-}
-
-:root {
+  --color-row-alt1: #E8F5E9;
+  --color-row-alt2: #FFEBEE;
 
   /* -------------------- 间距系统 -------------------- */
   --space-xs: 4px;
@@ -107,8 +95,8 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --font-weight-micro: 700;  /* 元数据标签使用 */
-  --letter-spacing-micro: 0.05em;  /* 元数据标签字间距 */
+  --font-weight-micro: 700;
+  --letter-spacing-micro: 0.05em;
 
   /* -------------------- 行高 -------------------- */
   --line-height-tight: 1.25;
@@ -126,6 +114,15 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
+}
+
+/* 表格行交替颜色样式 */
+.table-row-alt-1 {
+  background-color: #E8F5E9 !important;
+}
+
+.table-row-alt-2 {
+  background-color: #FFEBEE !important;
 }
 
 /* ============================================

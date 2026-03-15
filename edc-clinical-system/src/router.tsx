@@ -18,6 +18,10 @@ const DataExport = lazy(() => import('./pages/DataExport'))
 const SystemConfig = lazy(() => import('./pages/SystemConfig'))
 const SystemLogs = lazy(() => import('./pages/SystemLogs'))
 const VisitConfig = lazy(() => import('./pages/VisitConfig'))
+const DictionaryManager = lazy(() => import('./pages/DictionaryManager'))
+const ProjectAudit = lazy(() => import('./pages/ProjectAudit'))
+const ProjectWizard = lazy(() => import('./pages/ProjectWizard'))
+const CRFTemplates = lazy(() => import('./pages/CRFTemplates'))
 
 /**
  * 页面加载占位符
@@ -68,6 +72,14 @@ export const router = createBrowserRouter([
             element: <ProjectList />,
           },
           {
+            path: 'projects/new',
+            element: <ProjectWizard />,
+          },
+          {
+            path: 'projects/audit',
+            element: <ProjectAudit />,
+          },
+          {
             path: 'projects/:id',
             element: <ProjectDetail />,
           },
@@ -86,6 +98,10 @@ export const router = createBrowserRouter([
           {
             path: 'crf-designer',
             element: <CRFDesigner />,
+          },
+          {
+            path: 'crf-templates',
+            element: <CRFTemplates />,
           },
           {
             path: 'projects/:id/visit-crf-matrix',
@@ -118,6 +134,10 @@ export const router = createBrowserRouter([
           {
             path: 'visit-config',
             element: <VisitConfig />,
+          },
+          {
+            path: 'dictionary',
+            element: <DictionaryManager />,
           },
         ],
       },
