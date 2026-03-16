@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   Card,
@@ -42,13 +42,13 @@ export default function VisitCRFMatrix() {
   }, [id])
 
   // 初始化矩阵
-  useState(() => {
+  useEffect(() => {
     const initialMatrix: Record<string, string[]> = {}
     mockVisits.forEach(visit => {
       initialMatrix[visit.id] = visit.crfs || []
     })
     setMatrix(initialMatrix)
-  })
+  }, [])
 
   // 处理CRF选择
   const handleCRFChange = (visitId: string, crf: string, checked: boolean) => {
