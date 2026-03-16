@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   HomeOutlined,
   ProjectOutlined,
+  FileTextOutlined,
   FileSearchOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons'
@@ -82,6 +83,19 @@ export default function Header({
           { key: '/data-query/subjects', label: '受试者查询' },
           { key: '/data-query/queries', label: '质疑查询' },
           { key: '/export', label: '数据导出' },
+        ],
+      })
+    }
+
+    // CRF管理 - 含子菜单
+    if (checkPermission(Permission.CRF_VIEW)) {
+      items.push({
+        key: 'crf-menu',
+        icon: <FileTextOutlined />,
+        label: 'CRF管理',
+        children: [
+          { key: '/crf-designer', label: '表单设计' },
+          { key: '/crf-templates', label: '模板市场' },
         ],
       })
     }
