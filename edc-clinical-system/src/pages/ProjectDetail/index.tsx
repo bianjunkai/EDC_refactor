@@ -55,6 +55,7 @@ export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('overview')
+  const [settingsTab, setSettingsTab] = useState('basic')
 
   // 获取项目数据
   const project = useMemo(() => {
@@ -507,8 +508,6 @@ export default function ProjectDetail() {
 
   // 渲染项目设置标签（合并基本信息、审核流程、成员管理、试验分组）
   const renderProjectSettings = () => {
-    const [settingsTab, setSettingsTab] = useState('basic')
-
     const settingsTabItems = [
       { key: 'basic', label: '基本信息' },
       { key: 'members', label: '成员管理' },
