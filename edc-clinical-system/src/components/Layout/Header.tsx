@@ -7,16 +7,8 @@ import {
   SettingOutlined,
   HomeOutlined,
   ProjectOutlined,
-  FileTextOutlined,
-  QuestionCircleOutlined,
-  ExportOutlined,
   FileSearchOutlined,
-  CalendarOutlined,
-  DatabaseOutlined,
-  TeamOutlined,
-  AuditOutlined,
-  ApiOutlined,
-  BookOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
@@ -43,7 +35,7 @@ export default function Header({
   const location = useLocation()
   const { checkPermission } = usePermission()
 
-  // 根据权限动态生成导航项 - 支持二级菜单
+  // 根据权限动态生成导航项 - 简化后的结构
   const getNavItems = () => {
     const items: any[] = []
 
@@ -52,12 +44,12 @@ export default function Header({
       items.push({ key: '/', icon: <HomeOutlined />, label: '首页' })
     }
 
-    // 项目管理 - 含子菜单
+    // 项目 - 含子菜单
     if (checkPermission(Permission.PROJECT_VIEW)) {
       items.push({
         key: 'project-menu',
         icon: <ProjectOutlined />,
-        label: '项目管理',
+        label: '项目',
         children: [
           { key: '/projects', label: '项目列表' },
           { key: '/projects/audit', label: '项目审核' },
@@ -65,59 +57,42 @@ export default function Header({
       })
     }
 
-    // 受试者管理
-    if (checkPermission(Permission.SUBJECT_VIEW)) {
-      items.push({ key: '/subjects', icon: <UserOutlined />, label: '受试者管理' })
-    }
-
-    // CRF管理 - 含子菜单
-    if (checkPermission(Permission.CRF_VIEW)) {
+    // 我的工作 - 含子菜单 (待录入、待处理质疑、待审核)
+    if (checkPermission(Permission.MY_WORK)) {
       items.push({
-        key: 'crf-menu',
-        icon: <FileTextOutlined />,
-        label: 'CRF管理',
+        key: 'mywork-menu',
+        icon: <UnorderedListOutlined />,
+        label: '我的工作',
         children: [
-          { key: '/crf-designer', label: '表单设计' },
-          { key: '/crf-templates', label: '模板市场' },
+          { key: '/my-work', label: '工作台' },
+          { key: '/my-work/pending-data', label: '待录入数据' },
+          { key: '/my-work/pending-queries', label: '待处理质疑' },
         ],
       })
     }
 
-    // 访视配置
-    if (checkPermission(Permission.VISIT_CONFIG)) {
-      items.push({ key: '/visit-config', icon: <CalendarOutlined />, label: '访视配置' })
-    }
-
-    // 质疑管理
-    if (checkPermission(Permission.QUERY_VIEW)) {
-      items.push({ key: '/queries', icon: <QuestionCircleOutlined />, label: '质疑管理' })
-    }
-
-    // 数据导出
-    if (checkPermission(Permission.PROJECT_EXPORT)) {
-      items.push({ key: '/export', icon: <ExportOutlined />, label: '数据导出' })
+    // 数据查询 - 含子菜单
+    if (checkPermission(Permission.DATA_QUERY)) {
+      items.push({
+        key: 'dataquery-menu',
+        icon: <FileSearchOutlined />,
+        label: '数据查询',
+        children: [
+          { key: '/data-query', label: '数据查询' },
+          { key: '/data-query/subjects', label: '受试者查询' },
+          { key: '/data-query/queries', label: '质疑查询' },
+          { key: '/export', label: '数据导出' },
+        ],
+      })
     }
 
     // 系统配置 - 含子菜单
-    if (checkPermission(Permission.PROJECT_VIEW)) {
+    if (checkPermission(Permission.CONFIG_USER)) {
       items.push({
-        key: 'system-menu',
+        key: '/config',
         icon: <SettingOutlined />,
         label: '系统配置',
-        children: [
-          { key: '/config', icon: <TeamOutlined />, label: '用户管理' },
-          { key: '/config/roles', icon: <ApiOutlined />, label: '角色权限' },
-          { key: '/config/centers', icon: <ApiOutlined />, label: '中心管理' },
-          { key: '/dictionary', icon: <BookOutlined />, label: '标准字典库' },
-          { key: '/config/views', icon: <DatabaseOutlined />, label: '数据视图' },
-          { key: '/config/workflow', icon: <AuditOutlined />, label: '审核流程' },
-        ],
       })
-    }
-
-    // 系统日志
-    if (checkPermission(Permission.LOG_VIEW)) {
-      items.push({ key: '/logs', icon: <FileSearchOutlined />, label: '系统日志' })
     }
 
     return items
@@ -173,17 +148,19 @@ export default function Header({
     >
       {/* Left - Logo + Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 20 }} role="img" aria-label="医院">🏥</span>
-        <span
-          style={{
-            fontSize: 18,
-            fontWeight: 600,
-            color: 'var(--color-primary-500)',
-            marginRight: 8,
-          }}
-        >
-          EDC系统
-        </span>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+          <span style={{ fontSize: 20 }} role="img" aria-label="医院">🏥</span>
+          <span
+            style={{
+              fontSize: 18,
+              fontWeight: 600,
+              color: 'var(--color-primary-500)',
+              marginRight: 8,
+            }}
+          >
+            EDC系统
+          </span>
+        </Link>
 
         {/* Breadcrumb (Simple mode only, after logo) */}
         {mode === 'simple' && breadcrumb && breadcrumb.length > 0 && (
