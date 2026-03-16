@@ -159,13 +159,16 @@ export default function OCRImport({ visible, onCancel, onApply }: OCRImportProps
             beforeUpload={handleUpload}
             accept="image/*,.pdf"
             maxCount={1}
+            showUploadList={false}
             className={styles.uploader}
           >
-            <p className="ant-upload-drag-icon">
-              <FileImageOutlined style={{ fontSize: 48, color: '#5CB8A6' }} />
-            </p>
-            <p className="ant-upload-text">点击或拖拽上传CRF扫描件/照片</p>
-            <p className="ant-upload-hint">支持 JPG、PNG、PDF 格式</p>
+            <div style={{ padding: '20px 0' }}>
+              <p className="ant-upload-drag-icon">
+                <FileImageOutlined style={{ fontSize: 48, color: '#5CB8A6' }} />
+              </p>
+              <p className="ant-upload-text">点击或拖拽上传CRF扫描件/照片</p>
+              <p className="ant-upload-hint">支持 JPG、PNG、PDF 格式</p>
+            </div>
           </Upload.Dragger>
         )}
 

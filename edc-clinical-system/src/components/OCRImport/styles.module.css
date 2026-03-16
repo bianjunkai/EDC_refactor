@@ -17,11 +17,32 @@
   border-color: #5CB8A6;
 }
 
+/* 修复 Dragger 组件的边框问题 */
+.uploader :global(.ant-upload-drag) {
+  border: none !important;
+  background: transparent !important;
+}
+
+.uploader :global(.ant-upload-drag-container) {
+  border: none !important;
+}
+
 /* 预览区域 */
 .previewSection {
   padding: 16px;
   background: #f5f5f5;
   border-radius: 8px;
+}
+
+/* 修复 Modal 内部布局 */
+.container :global(.ant-row) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.container :global(.ant-col-12) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .imageWrapper {
