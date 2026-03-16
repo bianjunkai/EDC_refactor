@@ -86,12 +86,13 @@ export default function VisitCRFMatrix() {
       key: crf,
       width: 80,
       align: 'center' as const,
-      render: (_: unknown, visit: typeof mockVisits[0]) => {
-        const isChecked = matrix[visit.id]?.includes(crf) || visit.crfs?.includes(crf)
+      render: (_: unknown, record: typeof mockVisits[0]) => {
+        if (!record) return null
+        const isChecked = matrix[record.id]?.includes(crf) || record.crfs?.includes(crf)
         return (
           <Checkbox
             checked={isChecked}
-            onChange={(e: CheckboxChangeEvent) => handleCRFChange(visit.id, crf, e.target.checked)}
+            onChange={(e: CheckboxChangeEvent) => handleCRFChange(record.id, crf, e.target.checked)}
           />
         )
       },
