@@ -122,6 +122,7 @@ export const mockProjects: Project[] = [
 export const mockSubjects: Subject[] = [
   {
     id: 'S001',
+    projectId: '1',
     screeningId: 'SCR-2026-001',
     randomId: 'RND-001',
     name: '张三',
@@ -138,6 +139,7 @@ export const mockSubjects: Subject[] = [
   },
   {
     id: 'S002',
+    projectId: '1',
     screeningId: 'SCR-2026-002',
     randomId: 'RND-002',
     name: '李四',
@@ -153,6 +155,7 @@ export const mockSubjects: Subject[] = [
   },
   {
     id: 'S003',
+    projectId: '1',
     screeningId: 'SCR-2026-003',
     gender: '男',
     age: 38,
@@ -165,6 +168,7 @@ export const mockSubjects: Subject[] = [
   },
   {
     id: 'S004',
+    projectId: '1',
     screeningId: 'SCR-2026-004',
     randomId: 'RND-003',
     name: '王五',
@@ -180,6 +184,7 @@ export const mockSubjects: Subject[] = [
   },
   {
     id: 'S005',
+    projectId: '1',
     screeningId: 'SCR-2026-005',
     gender: '男',
     age: 55,
@@ -192,6 +197,7 @@ export const mockSubjects: Subject[] = [
   },
   {
     id: 'S006',
+    projectId: '1',
     screeningId: 'SCR-2026-006',
     gender: '女',
     age: 48,
@@ -204,6 +210,7 @@ export const mockSubjects: Subject[] = [
   },
   {
     id: 'S007',
+    projectId: '1',
     screeningId: 'SCR-2026-007',
     randomId: 'RND-004',
     name: '赵六',

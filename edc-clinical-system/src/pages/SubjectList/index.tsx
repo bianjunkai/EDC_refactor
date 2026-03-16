@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Card,
   Button,
@@ -20,6 +21,7 @@ import {
   EyeOutlined,
   EditOutlined,
   SwapOutlined,
+  FormOutlined,
 } from '@ant-design/icons'
 import { mockSubjects, mockProjects } from '@/utils/mockData'
 import StatusTag from '@/components/Common/StatusTag'
@@ -32,6 +34,7 @@ const { Text } = Typography
 const { Option } = Select
 
 export default function SubjectList() {
+  const navigate = useNavigate()
   const [subjects] = useState<Subject[]>(mockSubjects)
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
   const [drawerVisible, setDrawerVisible] = useState(false)
@@ -39,6 +42,12 @@ export default function SubjectList() {
   const [filterStatus, setFilterStatus] = useState<string>('全部')
   const [filterCenter, setFilterCenter] = useState<string>('全部')
   const [searchText, setSearchText] = useState('')
+
+  // 跳转到CRF填写页面
+  const handleFillCRF = (subject: Subject) => {
+    // 跳转到第一个CRF表单（人口学资料）
+    navigate(`/projects/${subject.projectId}/subjects/${subject.id}/crf/crf-1`)
+  }
 
   // 筛选受试者
   const filteredSubjects = subjects.filter((subject) => {
@@ -302,7 +311,9 @@ export default function SubjectList() {
 
             {/* 操作按钮 */}
             <Space wrap style={{ marginTop: 24 }}>
-              <Button type="primary">填写CRF</Button>
+              <Button type="primary" icon={<FormOutlined />} onClick={() => handleFillCRF(selectedSubject!)}>
+                填写CRF
+              </Button>
               <Button>查看记录</Button>
               <Button>发起质疑</Button>
             </Space>

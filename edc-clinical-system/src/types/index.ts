@@ -30,6 +30,7 @@ export type ProjectStatus =
 // 受试者类型
 export interface Subject {
   id: string
+  projectId: string
   screeningId: string
   randomId?: string
   name?: string
