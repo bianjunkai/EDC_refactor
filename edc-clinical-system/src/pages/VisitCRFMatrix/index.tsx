@@ -70,12 +70,15 @@ export default function VisitCRFMatrix() {
       key: 'visit',
       fixed: 'left' as const,
       width: 200,
-      render: (visit: typeof mockVisits[0]) => (
-        <div className={styles.visitCell}>
-          <div className={styles.visitName}>{visit.name}</div>
-          <div className={styles.visitPhase}>{visit.phase} · {visit.type}</div>
-        </div>
-      ),
+      render: (visit: typeof mockVisits[0]) => {
+        if (!visit) return null
+        return (
+          <div className={styles.visitCell}>
+            <div className={styles.visitName}>{visit.name}</div>
+            <div className={styles.visitPhase}>{visit.phase} · {visit.type}</div>
+          </div>
+        )
+      },
     },
     ...mockCRFs.map(crf => ({
       title: (
