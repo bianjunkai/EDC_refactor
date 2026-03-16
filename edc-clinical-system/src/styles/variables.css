@@ -29,6 +29,7 @@
   --color-border-light: #f3f4f6;
   --color-background: #f5f7fa;
   --color-background-white: #ffffff;
+  --color-progress-bg: #f0f0f0;
 
   /* -------------------- 状态色 -------------------- */
   --color-status-ongoing-bg: #d1fae5;
@@ -118,11 +119,11 @@
 
 /* 表格行交替颜色样式 */
 .table-row-alt-1 {
-  background-color: #E8F5E9 !important;
+  background-color: var(--color-row-alt1) !important;
 }
 
 .table-row-alt-2 {
-  background-color: #FFEBEE !important;
+  background-color: var(--color-row-alt2) !important;
 }
 
 /* ============================================

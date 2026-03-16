@@ -97,7 +97,7 @@ export default function VisitConfig() {
         const isLinked = visitCRFMatrix[record.crf]?.includes(visit.id)
         return (
           <Checkbox checked={isLinked}>
-            {isLinked && <CheckSquareOutlined style={{ color: '#5CB8A6' }} />}
+            {isLinked && <CheckSquareOutlined style={{ color: 'var(--color-primary-400)' }} />}
           </Checkbox>
         )
       },
@@ -151,8 +151,8 @@ export default function VisitConfig() {
           {/* 访视阶段标签 */}
           <div style={{ marginBottom: 16 }}>
             <Space size="large">
-              <Badge color="#5CB8A6" text="筛选期" />
-              <Badge color="#27AE60" text="治疗期" />
+              <Badge color="var(--color-primary-400)" text="筛选期" />
+              <Badge color="var(--color-success)" text="治疗期" />
               <Badge color="#9C27B0" text="随访期" />
             </Space>
           </div>
@@ -170,17 +170,17 @@ export default function VisitConfig() {
           />
 
           {/* 图例 */}
-          <div style={{ marginTop: 16, padding: 12, background: '#f5f7fa', borderRadius: 8 }}>
+          <div style={{ marginTop: 16, padding: 12, background: 'var(--color-background)', borderRadius: 8 }}>
             <Text type="secondary">
               <Space>
                 <span>图例：</span>
-                <CheckSquareOutlined style={{ color: '#5CB8A6' }} />
+                <CheckSquareOutlined style={{ color: 'var(--color-primary-400)' }} />
                 <span>表示该CRF在当前访视需要填写</span>
                 <span style={{ marginLeft: 16 }}>
-                  <SyncOutlined style={{ color: '#5CB8A6' }} /> 循环访视
+                  <SyncOutlined style={{ color: 'var(--color-primary-400)' }} /> 循环访视
                 </span>
                 <span>
-                  <CheckSquareOutlined style={{ color: '#27AE60' }} /> 单次访视
+                  <CheckSquareOutlined style={{ color: 'var(--color-success)' }} /> 单次访视
                 </span>
               </Space>
             </Text>
@@ -200,9 +200,9 @@ export default function VisitConfig() {
                   borderRadius: '50%',
                   background:
                     visit.phase === '筛选期'
-                      ? '#E8F5F2'
+                      ? 'var(--color-primary-50)'
                       : visit.phase === '治疗期'
-                      ? '#E8F5E9'
+                      ? 'var(--color-row-alt1)'
                       : '#F3E5F5',
                   display: 'flex',
                   flexDirection: 'column',
@@ -210,9 +210,9 @@ export default function VisitConfig() {
                   justifyContent: 'center',
                   border: `2px solid ${
                     visit.phase === '筛选期'
-                      ? '#5CB8A6'
+                      ? 'var(--color-primary-400)'
                       : visit.phase === '治疗期'
-                      ? '#27AE60'
+                      ? 'var(--color-success)'
                       : '#9C27B0'
                   }`,
                 }}
@@ -227,7 +227,7 @@ export default function VisitConfig() {
                   style={{
                     flex: 1,
                     height: 2,
-                    background: '#e5e7eb',
+                    background: 'var(--color-border)',
                     margin: '0 8px',
                   }}
                 />

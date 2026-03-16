@@ -127,35 +127,35 @@ export default function MyWork({ defaultTab = 'workbench' }: MyWorkProps) {
     return (
       <div>
         <Row gutter={24} style={{ marginBottom: 24 }}>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8}>
             <Card className={styles.statCard} hoverable onClick={() => setActiveTab('pending-data')}>
               <Statistic
                 title="待录入数据"
                 value={stats.pendingData}
-                prefix={<FileTextOutlined style={{ color: '#5CB8A6' }} />}
-                valueStyle={{ color: '#5CB8A6' }}
+                prefix={<FileTextOutlined style={{ color: 'var(--color-primary-400)' }} />}
+                valueStyle={{ color: 'var(--color-primary-400)' }}
               />
               <Text type="secondary">点击查看详情</Text>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8}>
             <Card className={styles.statCard} hoverable onClick={() => setActiveTab('pending-queries')}>
               <Statistic
                 title="待处理质疑"
                 value={stats.pendingQueries}
-                prefix={<QuestionCircleOutlined style={{ color: '#F39C12' }} />}
-                valueStyle={{ color: '#F39C12' }}
+                prefix={<QuestionCircleOutlined style={{ color: 'var(--color-warning)' }} />}
+                valueStyle={{ color: 'var(--color-warning)' }}
               />
               <Text type="secondary">点击查看详情</Text>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8}>
             <Card className={styles.statCard} hoverable>
               <Statistic
                 title="待审核项目"
                 value={stats.pendingAudits}
-                prefix={<AuditOutlined style={{ color: '#2196F3' }} />}
-                valueStyle={{ color: '#2196F3' }}
+                prefix={<AuditOutlined style={{ color: 'var(--color-info)' }} />}
+                valueStyle={{ color: 'var(--color-info)' }}
               />
               <Text type="secondary">点击查看详情</Text>
             </Card>
@@ -164,7 +164,7 @@ export default function MyWork({ defaultTab = 'workbench' }: MyWorkProps) {
 
         {/* 最近待办 */}
         <Row gutter={24}>
-          <Col span={12}>
+          <Col xs={24} lg={12}>
             <Card
               title={
                 <Space>
@@ -185,7 +185,7 @@ export default function MyWork({ defaultTab = 'workbench' }: MyWorkProps) {
                     ]}
                   >
                     <List.Item.Meta
-                      avatar={<Avatar icon={<UserOutlined />} style={{ backgroundColor: '#E8F5F2' }} />}
+                      avatar={<Avatar icon={<UserOutlined />} style={{ backgroundColor: 'var(--color-primary-50)' }} />}
                       title={item.subject}
                       description={`${item.project} - ${item.visit}`}
                     />
@@ -194,7 +194,7 @@ export default function MyWork({ defaultTab = 'workbench' }: MyWorkProps) {
               />
             </Card>
           </Col>
-          <Col span={12}>
+          <Col xs={24} lg={12}>
             <Card
               title={
                 <Space>
@@ -215,7 +215,7 @@ export default function MyWork({ defaultTab = 'workbench' }: MyWorkProps) {
                     ]}
                   >
                     <List.Item.Meta
-                      avatar={<Avatar icon={<QuestionCircleOutlined />} style={{ backgroundColor: '#FEF3E8' }} />}
+                      avatar={<Avatar icon={<QuestionCircleOutlined />} style={{ backgroundColor: 'var(--color-warning)' }} />}
                       title={`质疑 #${item.id}`}
                       description={item.content.substring(0, 30) + '...'}
                     />
@@ -312,7 +312,7 @@ export default function MyWork({ defaultTab = 'workbench' }: MyWorkProps) {
         />
         {pendingQueries.length === 0 && (
           <div style={{ textAlign: 'center', padding: 40 }}>
-            <QuestionCircleOutlined style={{ fontSize: 48, color: '#ccc' }} />
+            <QuestionCircleOutlined style={{ fontSize: 48, color: 'var(--color-text-placeholder)' }} />
             <Text type="secondary" style={{ display: 'block', marginTop: 16 }}>暂无待处理质疑</Text>
           </div>
         )}

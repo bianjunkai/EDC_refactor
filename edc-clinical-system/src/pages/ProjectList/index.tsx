@@ -98,8 +98,8 @@ export default function ProjectList() {
     onChange: (keys: React.Key[]) => setSelectedRowKeys(keys),
   }
 
-  // 表格列
-  const columns = [
+  // 表格列 - 使用 useMemo 避免每次渲染重新创建
+  const columns = useMemo(() => [
     {
       title: '项目名称',
       dataIndex: 'name',
@@ -136,7 +136,7 @@ export default function ProjectList() {
             <Progress
               percent={Math.round(record.progress)}
               size="small"
-              strokeColor="#5CB8A6"
+              strokeColor="var(--color-primary-400)"
               showInfo={false}
               style={{ width: 60, marginRight: 8 }}
             />
@@ -153,7 +153,7 @@ export default function ProjectList() {
       key: 'queryCount',
       width: 80,
       align: 'center' as const,
-      render: (count: number) => count > 0 ? <Badge count={count} style={{ backgroundColor: '#F39C12' }} /> : '-',
+      render: (count: number) => count > 0 ? <Badge count={count} style={{ backgroundColor: 'var(--color-warning)' }} /> : '-',
     },
     {
       title: '操作',
@@ -184,7 +184,7 @@ export default function ProjectList() {
         </Space>
       ),
     },
-  ]
+  ], [])
 
   // 状态标签页配置
   const statusTabs = [
@@ -256,7 +256,7 @@ export default function ProjectList() {
                 count={tab.count}
                 style={{
                   marginLeft: 8,
-                  backgroundColor: activeTab === tab.key ? '#5CB8A6' : '#d9d9d9',
+                  backgroundColor: activeTab === tab.key ? 'var(--color-primary-400)' : '#d9d9d9',
                 }}
               />
             </span>

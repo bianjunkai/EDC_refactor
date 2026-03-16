@@ -134,10 +134,10 @@ export default function Header({
   return (
     <AntHeader
       style={{
-        background: '#fff',
+        background: 'var(--color-background-white)',
         padding: '0 24px',
         height: headerHeight,
-        borderBottom: '1px solid #e5e7eb',
+        borderBottom: '1px solid var(--color-border)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -148,8 +148,8 @@ export default function Header({
     >
       {/* Left - Logo + Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <span style={{ fontSize: 20 }} role="img" aria-label="医院">🏥</span>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }} aria-label="EDC系统首页">
+          <span style={{ fontSize: 20 }} role="img" aria-hidden="true">🏥</span>
           <span
             style={{
               fontSize: 18,
@@ -165,7 +165,7 @@ export default function Header({
         {/* Breadcrumb (Simple mode only, after logo) */}
         {mode === 'simple' && breadcrumb && breadcrumb.length > 0 && (
           <>
-            <span style={{ color: '#d1d5db' }}>|</span>
+            <span style={{ color: 'var(--color-border)' }}>|</span>
             <Breadcrumb
               separator=">"
               items={breadcrumb.map((item) => ({

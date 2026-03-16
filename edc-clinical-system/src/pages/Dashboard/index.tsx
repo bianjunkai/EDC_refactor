@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import {
   Card,
   Row,
@@ -74,22 +74,23 @@ export default function Dashboard() {
     }
   }, [])
 
-  // 待办事项
+  // 待办事项 - 使用 CSS 变量
   const todoItems = useMemo(() => [
-    { type: 'review', count: 3, label: '条待审核', icon: <FileSearchOutlined />, color: '#5CB8A6' },
-    { type: 'query', count: mockQueries.filter(q => q.status === '待处理').length, label: '条待处理质疑', icon: <QuestionCircleOutlined />, color: '#F39C12' },
-    { type: 'export', count: 2, label: '份待导出', icon: <FileSyncOutlined />, color: '#2196F3' },
+    { type: 'review', count: 3, label: '条待审核', icon: <FileSearchOutlined />, color: 'var(--color-primary-400)' },
+    { type: 'query', count: mockQueries.filter(q => q.status === '待处理').length, label: '条待处理质疑', icon: <QuestionCircleOutlined />, color: 'var(--color-warning)' },
+    { type: 'export', count: 2, label: '份待导出', icon: <FileSyncOutlined />, color: 'var(--color-info)' },
   ], [])
 
   // 快速操作按钮配置 - 根据PRD
-  const quickActions = [
+  // 快速操作按钮配置 - 使用 useMemo 避免每次渲染重新创建
+  const quickActions = useMemo(() => [
     { icon: <PlusOutlined />, label: '新建项目', path: '/projects', primary: true },
     { icon: <EditOutlined />, label: '录入数据', path: '/subjects', primary: false },
     { icon: <QuestionCircleOutlined />, label: '查看质疑', path: '/queries', primary: false },
-  ]
+  ], [])
 
-  // 项目表格列定义
-  const projectColumns = [
+  // 项目表格列定义 - 使用 useMemo 避免每次渲染重新创建
+  const projectColumns = useMemo(() => [
     {
       title: '项目名称',
       dataIndex: 'name',
@@ -122,7 +123,7 @@ export default function Dashboard() {
       width: 120,
       render: (progress: number, record: Project) => (
         <div className={styles.projectProgress}>
-          <Progress percent={Math.round(progress)} size="small" strokeColor="#5CB8A6" showInfo={false} />
+          <Progress percent={Math.round(progress)} size="small" strokeColor="var(--color-primary-400)" showInfo={false} />
           <div className={styles.projectProgressText}>{record.enrolledCount}/{record.targetCount}</div>
         </div>
       ),
@@ -132,7 +133,7 @@ export default function Dashboard() {
       dataIndex: 'queryCount',
       key: 'queryCount',
       width: 80,
-      render: (count: number) => count > 0 ? <Badge count={count} style={{ backgroundColor: '#F39C12' }} /> : '-',
+      render: (count: number) => count > 0 ? <Badge count={count} style={{ backgroundColor: 'var(--color-warning)' }} /> : '-',
     },
     {
       title: '操作',
@@ -144,38 +145,38 @@ export default function Dashboard() {
         </Button>
       ),
     },
-  ]
+  ], [navigate])
 
-  // 获取通知图标 - 使用 CSS 变量颜色
-  const getNotificationIcon = (type: string) => {
+  // 获取通知图标 - 使用 CSS 变量颜色 - 使用 useCallback 避免每次渲染重新创建
+  const getNotificationIcon = useCallback((type: string) => {
     const iconProps = { style: { fontSize: 16 } }
     switch (type) {
       case 'success':
-        return <CheckCircleOutlined {...iconProps} style={{ color: '#27AE60' }} />
+        return <CheckCircleOutlined {...iconProps} style={{ color: 'var(--color-success)' }} />
       case 'warning':
-        return <ExclamationCircleOutlined {...iconProps} style={{ color: '#F39C12' }} />
+        return <ExclamationCircleOutlined {...iconProps} style={{ color: 'var(--color-warning)' }} />
       case 'error':
-        return <ExclamationCircleOutlined {...iconProps} style={{ color: '#E74C3C' }} />
+        return <ExclamationCircleOutlined {...iconProps} style={{ color: 'var(--color-error)' }} />
       default:
-        return <InfoCircleOutlined {...iconProps} style={{ color: '#2196F3' }} />
+        return <InfoCircleOutlined {...iconProps} style={{ color: 'var(--color-info)' }} />
     }
-  }
+  }, [])
 
-  // 获取活动颜色 - 映射到 CSS 变量
-  const getActivityColor = (type: string) => {
+  // 获取活动颜色 - 使用 CSS 变量 - 使用 useCallback 避免每次渲染重新创建
+  const getActivityColor = useCallback((type: string) => {
     switch (type) {
       case 'fill':
-        return '#27AE60'
+        return 'var(--color-success)'
       case 'query':
-        return '#F39C12'
+        return 'var(--color-warning)'
       case 'enroll':
-        return '#5CB8A6'
+        return 'var(--color-primary-400)'
       case 'complete':
-        return '#27AE60'
+        return 'var(--color-success)'
       default:
-        return '#999999'
+        return 'var(--color-text-placeholder)'
     }
-  }
+  }, [])
 
   return (
     <div>
@@ -211,58 +212,58 @@ export default function Dashboard() {
 
       {/* 项目概览统计卡片 - PRD: 4个核心指标 */}
       <Row gutter={24} style={{ marginBottom: 24 }}>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/projects?status=进行中')}>
             <Statistic
               title="进行中"
               value={projectStats.inProgress}
-              valueStyle={{ color: '#5CB8A6', fontSize: 32, fontWeight: 600 }}
+              valueStyle={{ color: 'var(--color-primary-400)', fontSize: 32, fontWeight: 600 }}
               prefix={<TeamOutlined />}
             />
-            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
-              <div style={{ width: `${(projectStats.inProgress / projectStats.total) * 100}%`, height: '100%', background: '#5CB8A6', borderRadius: 2 }} />
+            <div style={{ marginTop: 8, height: 4, background: 'var(--color-progress-bg)', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.inProgress / projectStats.total) * 100}%`, height: '100%', background: 'var(--color-primary-400)', borderRadius: 2 }} />
             </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/projects?status=审批中')}>
             <Statistic
               title="审核中"
               value={projectStats.inReview}
-              valueStyle={{ color: '#2196F3', fontSize: 32, fontWeight: 600 }}
+              valueStyle={{ color: 'var(--color-info)', fontSize: 32, fontWeight: 600 }}
               prefix={<FileSearchOutlined />}
             />
-            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
-              <div style={{ width: `${(projectStats.inReview / projectStats.total) * 100}%`, height: '100%', background: '#2196F3', borderRadius: 2 }} />
+            <div style={{ marginTop: 8, height: 4, background: 'var(--color-progress-bg)', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.inReview / projectStats.total) * 100}%`, height: '100%', background: 'var(--color-info)', borderRadius: 2 }} />
             </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/projects?status=已锁库')}>
             <Statistic
               title="已锁库"
               value={projectStats.locked}
-              valueStyle={{ color: '#27AE60', fontSize: 32, fontWeight: 600 }}
+              valueStyle={{ color: 'var(--color-success)', fontSize: 32, fontWeight: 600 }}
               prefix={<CheckCircleOutlined />}
             />
-            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
-              <div style={{ width: `${(projectStats.locked / projectStats.total) * 100}%`, height: '100%', background: '#27AE60', borderRadius: 2 }} />
+            <div style={{ marginTop: 8, height: 4, background: 'var(--color-progress-bg)', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.locked / projectStats.total) * 100}%`, height: '100%', background: 'var(--color-success)', borderRadius: 2 }} />
             </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
         </Col>
-        <Col span={6}>
+        <Col xs={24} sm={12} md={6}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/projects?status=待处理')}>
             <Statistic
               title="待处理"
               value={projectStats.pending}
-              valueStyle={{ color: '#F39C12', fontSize: 32, fontWeight: 600 }}
+              valueStyle={{ color: 'var(--color-warning)', fontSize: 32, fontWeight: 600 }}
               prefix={<InfoCircleOutlined />}
             />
-            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
-              <div style={{ width: `${(projectStats.pending / projectStats.total) * 100}%`, height: '100%', background: '#F39C12', borderRadius: 2 }} />
+            <div style={{ marginTop: 8, height: 4, background: 'var(--color-progress-bg)', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.pending / projectStats.total) * 100}%`, height: '100%', background: 'var(--color-warning)', borderRadius: 2 }} />
             </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
@@ -271,7 +272,7 @@ export default function Dashboard() {
 
       {/* 扩展统计：受试者、CRF、质疑 */}
       <Row gutter={24} style={{ marginBottom: 24 }}>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={8}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/subjects')}>
             <Statistic
               title="总受试者"
@@ -288,31 +289,31 @@ export default function Dashboard() {
             />
           </Card>
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={8}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/crf-designer')}>
             <Statistic
               title="CRF表单"
               value={12}
-              valueStyle={{ color: '#2196F3', fontSize: 28, fontWeight: 600 }}
+              valueStyle={{ color: 'var(--color-info)', fontSize: 28, fontWeight: 600 }}
               prefix={<FormOutlined />}
             />
-            <div style={{ marginTop: 8, color: '#666', fontSize: 12 }}>
+            <div style={{ marginTop: 8, color: 'var(--color-text-secondary)', fontSize: 12 }}>
               已发布: 8 | 草稿: 4
             </div>
           </Card>
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={24} md={8}>
           <Card className={styles.statCard} hoverable onClick={() => navigate('/queries')}>
             <Statistic
               title="待处理质疑"
               value={projectStats.pendingQueries}
               suffix={`/ 总计 ${projectStats.totalQueries}`}
-              valueStyle={{ color: '#F39C12', fontSize: 28, fontWeight: 600 }}
+              valueStyle={{ color: 'var(--color-warning)', fontSize: 28, fontWeight: 600 }}
               prefix={<QuestionCircleOutlined />}
             />
             <Progress
               percent={Math.round((projectStats.pendingQueries / projectStats.totalQueries) * 100)}
-              strokeColor="#F39C12"
+              strokeColor="var(--color-warning)"
               showInfo={false}
               style={{ marginTop: 8 }}
             />
@@ -323,7 +324,7 @@ export default function Dashboard() {
       {/* 内容区 */}
       <Row gutter={24}>
         {/* 左侧 - 我的项目表格 - PRD */}
-        <Col span={16}>
+        <Col xs={24} lg={16}>
           <Card
             className={styles.projectListCard}
             title="我的项目"
@@ -346,7 +347,7 @@ export default function Dashboard() {
         </Col>
 
         {/* 右侧 - 待办事项 + 最近活动 */}
-        <Col span={8}>
+        <Col xs={24} lg={8}>
           {/* 待办事项 - PRD */}
           <Card
             className={styles.todoCard}

@@ -11,7 +11,7 @@
 }
 
 .tabs {
-  background: #fff;
+  background: var(--color-background-white);
   border-radius: 8px;
   padding: 16px;
 }
@@ -36,7 +36,7 @@
 }
 
 .listItem:hover {
-  background-color: var(--color-primary-light, #E8F5F2);
+  background-color: var(--color-primary-50);
 }
 
 .emptyState {
@@ -49,7 +49,7 @@
 
 .emptyIcon {
   font-size: 64px;
-  color: #d9d9d9;
+  color: var(--color-border);
   margin-bottom: 16px;
 }
 
@@ -72,13 +72,13 @@
   padding: 24px;
   text-align: center;
   border-radius: 12px;
-  background: #fafafa;
+  background: var(--color-background);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .workItem:hover {
-  background: var(--color-primary-light, #E8F5F2);
+  background: var(--color-primary-50);
   transform: translateY(-2px);
 }
 

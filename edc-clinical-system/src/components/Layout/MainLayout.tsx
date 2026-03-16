@@ -75,8 +75,44 @@ export default function MainLayout() {
 
   return (
     <Layout style={{ minHeight: '100vh', background: 'var(--color-background)' }}>
+      {/* 跳转到主要内容的链接 - 键盘用户可绕过导航 */}
+      <a
+        href="#main-content"
+        className="skip-link"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+          zIndex: 9999,
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.position = 'fixed'
+          e.currentTarget.style.left = '16px'
+          e.currentTarget.style.top = '16px'
+          e.currentTarget.style.width = 'auto'
+          e.currentTarget.style.height = 'auto'
+          e.currentTarget.style.padding = '12px 24px'
+          e.currentTarget.style.background = 'var(--color-primary-400)'
+          e.currentTarget.style.color = '#fff'
+          e.currentTarget.style.borderRadius = '8px'
+          e.currentTarget.style.textDecoration = 'none'
+          e.currentTarget.style.fontWeight = '600'
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.position = 'absolute'
+          e.currentTarget.style.left = '-9999px'
+          e.currentTarget.style.width = '1px'
+          e.currentTarget.style.height = '1px'
+        }}
+      >
+        跳转到主要内容
+      </a>
       <Header mode={pageType} breadcrumb={breadcrumb} />
       <Content
+        id="main-content"
         style={{
           padding: 'var(--space-xl)',
           maxWidth: 1400,
