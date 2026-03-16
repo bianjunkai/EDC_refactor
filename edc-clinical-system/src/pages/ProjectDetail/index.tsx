@@ -17,6 +17,8 @@ import {
   Space,
   Badge,
   Avatar,
+  Dropdown,
+  message,
 } from 'antd'
 import {
   ArrowLeftOutlined,
@@ -24,10 +26,12 @@ import {
   MoreOutlined,
   TeamOutlined,
   FileTextOutlined,
-  ClockCircleOutlined,
   QuestionCircleOutlined,
   BarChartOutlined,
   FileSearchOutlined,
+  UserOutlined,
+  CalendarOutlined,
+  SettingOutlined,
 } from '@ant-design/icons'
 import { mockProjects, mockQueries, mockActivities } from '@/utils/mockData'
 import { getStatusColor, getTableRowClassName } from '@/constants/theme'
@@ -36,19 +40,14 @@ import styles from './styles.module.css'
 
 const { Title, Text } = Typography
 
-// 标签页配置
+// 标签页配置 - 简化为6个
 const tabItems: TabsProps['items'] = [
   { key: 'overview', label: '概览', icon: <BarChartOutlined /> },
-  { key: 'basic', label: '基本信息', icon: <FileTextOutlined /> },
-  { key: 'workflow', label: '审核流程', icon: <ClockCircleOutlined /> },
-  { key: 'members', label: '成员管理', icon: <TeamOutlined /> },
+  { key: 'subjects', label: '受试者', icon: <UserOutlined /> },
   { key: 'crf', label: 'CRF配置', icon: <FileTextOutlined /> },
-  { key: 'groups', label: '试验分组', icon: <TeamOutlined /> },
-  { key: 'data', label: '数据采集', icon: <FileTextOutlined /> },
-  { key: 'export', label: '数据导出', icon: <FileSearchOutlined /> },
-  { key: 'queries', label: '质疑管理', icon: <QuestionCircleOutlined /> },
-  { key: 'audit', label: '稽查留痕', icon: <FileSearchOutlined /> },
-  { key: 'reports', label: '统计报表', icon: <BarChartOutlined /> },
+  { key: 'visit', label: '访视计划', icon: <CalendarOutlined /> },
+  { key: 'data', label: '数据管理', icon: <FileSearchOutlined /> },
+  { key: 'settings', label: '项目设置', icon: <SettingOutlined /> },
 ]
 
 export default function ProjectDetail() {
@@ -314,30 +313,216 @@ export default function ProjectDetail() {
     </Card>
   )
 
-  // 渲染质疑管理标签
-  const renderQueries = () => (
-    <Card className={styles.queryCard}>
-      <Table
-        dataSource={projectQueries}
-        columns={[
-          { title: '质疑编号', dataIndex: 'id', key: 'id' },
-          { title: '受试者', dataIndex: 'subjectName', key: 'subjectName' },
-          { title: 'CRF', dataIndex: 'crfName', key: 'crfName' },
-          { title: '字段', dataIndex: 'fieldName', key: 'fieldName' },
-          { title: '内容', dataIndex: 'content', key: 'content', ellipsis: true },
-          { title: '状态', dataIndex: 'status', key: 'status', render: (status: string) => {
-            const { text, bg } = getStatusColor(status)
-            return <Tag style={{ color: text, backgroundColor: bg }}>{status}</Tag>
-          }},
-          { title: '发起人', dataIndex: 'creator', key: 'creator' },
-          { title: '时间', dataIndex: 'createdAt', key: 'createdAt' },
-        ]}
-        rowKey="id"
-        rowClassName={getTableRowClassName}
-        pagination={{ pageSize: 5 }}
-      />
-    </Card>
+  // 渲染受试者标签
+  const renderSubjects = () => {
+    const subjects = [
+      { id: 'S001', code: 'Subject-001', name: '张三', status: '在研', enrollmentDate: '2026-01-15', lastVisit: '2026-03-10', center: '北京协和医院' },
+      { id: 'S002', code: 'Subject-002', name: '李四', status: '在研', enrollmentDate: '2026-01-20', lastVisit: '2026-03-08', center: '北京协和医院' },
+      { id: 'S003', code: 'Subject-003', name: '王五', status: '已完成', enrollmentDate: '2026-01-10', lastVisit: '2026-03-01', center: '上海华山医院' },
+    ]
+    const columns = [
+      { title: '受试者编号', dataIndex: 'code', key: 'code' },
+      { title: '姓名', dataIndex: 'name', key: 'name' },
+      { title: '状态', dataIndex: 'status', key: 'status', render: (status: string) => (
+        <Tag color={status === '在研' ? 'green' : 'blue'}>{status}</Tag>
+      )},
+      { title: '入组日期', dataIndex: 'enrollmentDate', key: 'enrollmentDate' },
+      { title: '最近访视', dataIndex: 'lastVisit', key: 'lastVisit' },
+      { title: '中心', dataIndex: 'center', key: 'center' },
+      {
+        title: '操作',
+        key: 'action',
+        render: (_: any, record: any) => (
+          <Space>
+            <Button type="link" onClick={() => navigate(`/projects/${id}/subjects/${record.id}`)}>查看</Button>
+            <Button type="link" onClick={() => navigate(`/projects/${id}/subjects/${record.id}/crf/1`)}>填写CRF</Button>
+          </Space>
+        ),
+      },
+    ]
+    return (
+      <Card>
+        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
+          <Space>
+            <Button type="primary" onClick={() => navigate(`/projects/${id}/subjects`)}>添加受试者</Button>
+            <Button>导入受试者</Button>
+          </Space>
+          <Space>
+            <Button onClick={() => navigate(`/projects/${id}/subjects`)}>查看全部</Button>
+          </Space>
+        </div>
+        <Table
+          dataSource={subjects}
+          columns={columns}
+          rowKey="id"
+          rowClassName={getTableRowClassName}
+          pagination={{ pageSize: 5 }}
+        />
+      </Card>
+    )
+  }
+
+  // 渲染访视计划标签
+  const renderVisitPlan = () => {
+    const visits = [
+      { id: 'V1', name: '筛选期', day: 'Day -14 ~ -1', window: '±3天', status: '已完成' },
+      { id: 'V2', name: '基线期', day: 'Day 0', window: '±1天', status: '进行中' },
+      { id: 'V3', name: '治疗期1', day: 'Day 14', window: '±2天', status: '待进行' },
+      { id: 'V4', name: '治疗期2', day: 'Day 28', window: '±3天', status: '待进行' },
+      { id: 'V5', name: '治疗期3', day: 'Day 42', window: '±3天', status: '待进行' },
+      { id: 'V6', name: '随访期', day: 'Day 56', window: '±7天', status: '待进行' },
+    ]
+    return (
+      <Card>
+        <div style={{ marginBottom: 16 }}>
+          <Button type="primary" onClick={() => navigate(`/projects/${id}/visit-crf-matrix`)}>配置访视-CRF矩阵</Button>
+        </div>
+        <Table
+          dataSource={visits}
+          columns={[
+            { title: '访视编号', dataIndex: 'id', key: 'id' },
+            { title: '访视名称', dataIndex: 'name', key: 'name' },
+            { title: '计划时间', dataIndex: 'day', key: 'day' },
+            { title: '窗口期', dataIndex: 'window', key: 'window' },
+            { title: '状态', dataIndex: 'status', key: 'status', render: (status: string) => {
+              const colorMap: Record<string, string> = {
+                '已完成': 'green',
+                '进行中': 'blue',
+                '待进行': 'default',
+              }
+              return <Tag color={colorMap[status]}>{status}</Tag>
+            }},
+            {
+              title: '操作',
+              key: 'action',
+              render: () => (
+                <Button type="link">编辑</Button>
+              ),
+            },
+          ]}
+          rowKey="id"
+          rowClassName={getTableRowClassName}
+          pagination={false}
+        />
+      </Card>
+    )
+  }
+
+  // 渲染数据管理标签（合并数据采集、导出、质疑、稽查）
+  const renderDataManagement = () => (
+    <>
+      <Row gutter={16} style={{ marginBottom: 16 }}>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="已填写CRF"
+              value={45}
+              suffix="/ 60"
+              prefix={<FileTextOutlined />}
+              valueStyle={{ color: '#5CB8A6' }}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="待处理质疑"
+              value={projectQueries.filter(q => q.status === '待处理').length}
+              prefix={<QuestionCircleOutlined />}
+              valueStyle={{ color: '#F39C12' }}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="已完成SDV"
+              value={30}
+              suffix="/ 45"
+              prefix={<FileSearchOutlined />}
+              valueStyle={{ color: '#2196F3' }}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="数据质控"
+              value={98}
+              suffix="%"
+              prefix={<BarChartOutlined />}
+              valueStyle={{ color: '#27AE60' }}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Card title="质疑管理" style={{ marginBottom: 16 }}>
+        <Table
+          dataSource={projectQueries.slice(0, 5)}
+          columns={[
+            { title: '质疑编号', dataIndex: 'id', key: 'id', render: (id: string) => `#${id}` },
+            { title: '受试者', dataIndex: 'subjectName', key: 'subjectName' },
+            { title: 'CRF', dataIndex: 'crfName', key: 'crfName' },
+            { title: '内容', dataIndex: 'content', key: 'content', ellipsis: true },
+            { title: '状态', dataIndex: 'status', key: 'status', render: (status: string) => {
+              const { text, bg } = getStatusColor(status)
+              return <Tag style={{ color: text, backgroundColor: bg }}>{status}</Tag>
+            }},
+            {
+              title: '操作',
+              key: 'action',
+              render: () => <Button type="link" onClick={() => navigate(`/queries/1`)}>处理</Button>,
+            },
+          ]}
+          rowKey="id"
+          rowClassName={getTableRowClassName}
+          pagination={false}
+        />
+      </Card>
+
+      <Card title="数据导出">
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <div>
+            <Text>支持按项目、受试者、访视、CRF等条件导出数据</Text>
+          </div>
+          <div>
+            <Button type="primary" icon={<FileSearchOutlined />} onClick={() => navigate('/export')}>
+              前往数据导出
+            </Button>
+          </div>
+        </Space>
+      </Card>
+    </>
   )
+
+  // 渲染项目设置标签（合并基本信息、审核流程、成员管理、试验分组）
+  const renderProjectSettings = () => {
+    const [settingsTab, setSettingsTab] = useState('basic')
+
+    const settingsTabItems = [
+      { key: 'basic', label: '基本信息' },
+      { key: 'members', label: '成员管理' },
+      { key: 'workflow', label: '审核流程' },
+      { key: 'groups', label: '试验分组' },
+    ]
+
+    return (
+      <Card>
+        <Tabs
+          activeKey={settingsTab}
+          onChange={setSettingsTab}
+          items={settingsTabItems}
+        />
+        {settingsTab === 'basic' && renderBasicInfo()}
+        {settingsTab === 'members' && renderMembers()}
+        {settingsTab === 'workflow' && renderWorkflow()}
+        {settingsTab === 'groups' && (
+          <Card><Text type="secondary">试验分组配置 - 设置随机化分组规则</Text></Card>
+        )}
+      </Card>
+    )
+  }
 
   return (
     <div className={styles.container}>
@@ -356,8 +541,32 @@ export default function ProjectDetail() {
           </div>
         </Space>
         <Space>
-          <Button icon={<EditOutlined />}>编辑</Button>
-          <Button icon={<MoreOutlined />}>更多</Button>
+          <Button icon={<EditOutlined />} onClick={() => message.info('编辑项目功能')}>编辑</Button>
+          <Dropdown
+            menu={{
+              items: [
+                { key: 'export', label: '导出项目数据' },
+                { key: 'archive', label: '归档项目' },
+                { key: 'delete', label: '删除项目', danger: true },
+              ],
+              onClick: ({ key }) => {
+                switch (key) {
+                  case 'export':
+                    message.success('开始导出项目数据')
+                    break
+                  case 'archive':
+                    message.info('归档项目功能')
+                    break
+                  case 'delete':
+                    message.warning('删除项目需要确认')
+                    break
+                }
+              },
+            }}
+            placement="bottomRight"
+          >
+            <Button icon={<MoreOutlined />}>更多</Button>
+          </Dropdown>
         </Space>
       </div>
 
@@ -372,26 +581,11 @@ export default function ProjectDetail() {
       {/* 标签内容 */}
       <div className={styles.tabContent}>
         {activeTab === 'overview' && renderOverview()}
-        {activeTab === 'basic' && renderBasicInfo()}
-        {activeTab === 'workflow' && renderWorkflow()}
-        {activeTab === 'members' && renderMembers()}
+        {activeTab === 'subjects' && renderSubjects()}
         {activeTab === 'crf' && renderCRFConfig()}
-        {activeTab === 'groups' && (
-          <Card><Text type="secondary">试验分组配置</Text></Card>
-        )}
-        {activeTab === 'data' && (
-          <Card><Text type="secondary">数据采集监控</Text></Card>
-        )}
-        {activeTab === 'export' && (
-          <Card><Text type="secondary">数据导出配置</Text></Card>
-        )}
-        {activeTab === 'queries' && renderQueries()}
-        {activeTab === 'audit' && (
-          <Card><Text type="secondary">稽查留痕记录</Text></Card>
-        )}
-        {activeTab === 'reports' && (
-          <Card><Text type="secondary">统计报表</Text></Card>
-        )}
+        {activeTab === 'visit' && renderVisitPlan()}
+        {activeTab === 'data' && renderDataManagement()}
+        {activeTab === 'settings' && renderProjectSettings()}
       </div>
     </div>
   )
