@@ -291,7 +291,7 @@ export default function ProjectDetail() {
     <Card className={styles.crfCard}>
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Space>
-          <Button type="primary" icon={<PlusOutlined />}>新建CRF</Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/crf-designer')}>新建CRF</Button>
           <Button icon={<FileTextOutlined />} onClick={() => navigate(`/projects/${id}/visit-crf-matrix`)}>
             配置访视矩阵
           </Button>
@@ -308,8 +308,8 @@ export default function ProjectDetail() {
         renderItem={(item) => (
           <List.Item
             actions={[
-              <Button type="link" key="edit">编辑</Button>,
-              <Button type="link" key="preview">预览</Button>,
+              <Button type="link" key="edit" onClick={() => navigate('/crf-designer')}>编辑</Button>,
+              <Button type="link" key="preview" onClick={() => message.info('预览功能')}>预览</Button>,
             ]}
           >
             <List.Item.Meta
