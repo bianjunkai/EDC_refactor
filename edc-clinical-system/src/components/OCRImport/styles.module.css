@@ -4,27 +4,54 @@
   min-height: 300px;
 }
 
-/* 上传区域 */
-.uploader {
-  padding: 32px;
+/* 上传区域 - 简洁设计 */
+.uploadArea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: #fafafa;
   border: 2px dashed #d9d9d9;
   border-radius: 8px;
-  background: #fafafa;
   transition: all 0.3s;
+  cursor: pointer;
 }
 
-.uploader:hover {
+.uploadArea:hover {
   border-color: #5CB8A6;
+  background: #f0fdf9;
 }
 
-/* 修复 Dragger 组件的边框问题 */
-.uploader :global(.ant-upload-drag) {
+/* 隐藏 Dragger 默认边框 */
+.uploadArea :global(.ant-upload-drag) {
   border: none !important;
   background: transparent !important;
+  border-radius: 0 !important;
 }
 
-.uploader :global(.ant-upload-drag-container) {
+.uploadArea :global(.ant-upload-drag:hover) {
   border: none !important;
+}
+
+.uploadContent {
+  text-align: center;
+  padding: 20px;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.uploadText {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.uploadHint {
+  font-size: 14px;
+  color: #999;
 }
 
 /* 预览区域 */
@@ -32,17 +59,6 @@
   padding: 16px;
   background: #f5f5f5;
   border-radius: 8px;
-}
-
-/* 修复 Modal 内部布局 */
-.container :global(.ant-row) {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-.container :global(.ant-col-12) {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 .imageWrapper {
@@ -89,4 +105,15 @@
   justify-content: center;
   padding: 48px 0;
   gap: 16px;
+}
+
+/* 修复 Modal 内部布局 */
+.container :global(.ant-row) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.container :global(.ant-col-12) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }

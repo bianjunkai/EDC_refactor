@@ -17,14 +17,15 @@ import {
   ScanOutlined,
   CheckCircleOutlined,
   WarningOutlined,
-  FileImageOutlined,
   CloseOutlined,
   RobotOutlined,
+  InboxOutlined,
 } from '@ant-design/icons'
 import type { UploadFile } from 'antd/es/upload/interface'
 import styles from './styles.module.css'
 
 const { Title, Text } = Typography
+const { Dragger } = Upload
 
 interface OCRResult {
   field: string
@@ -153,23 +154,25 @@ export default function OCRImport({ visible, onCancel, onApply }: OCRImportProps
       <div className={styles.container}>
         {/* 上传区域 */}
         {!previewImage && (
-          <Upload.Dragger
-            fileList={fileList}
-            onChange={({ fileList }) => setFileList(fileList)}
-            beforeUpload={handleUpload}
-            accept="image/*,.pdf"
-            maxCount={1}
-            showUploadList={false}
-            className={styles.uploader}
-          >
-            <div style={{ padding: '20px 0' }}>
-              <p className="ant-upload-drag-icon">
-                <FileImageOutlined style={{ fontSize: 48, color: '#5CB8A6' }} />
-              </p>
-              <p className="ant-upload-text">点击或拖拽上传CRF扫描件/照片</p>
-              <p className="ant-upload-hint">支持 JPG、PNG、PDF 格式</p>
-            </div>
-          </Upload.Dragger>
+          <div className={styles.uploadArea}>
+            <Dragger
+              fileList={fileList}
+              onChange={({ fileList }) => setFileList(fileList)}
+              beforeUpload={handleUpload}
+              accept="image/*,.pdf"
+              maxCount={1}
+              showUploadList={false}
+              style={{ background: 'transparent', border: 'none' }}
+            >
+              <div className={styles.uploadContent}>
+                <p className={styles.uploadIcon}>
+                  <InboxOutlined style={{ color: '#5CB8A6' }} />
+                </p>
+                <p className={styles.uploadText}>点击或拖拽上传CRF扫描件/照片</p>
+                <p className={styles.uploadHint}>支持 JPG、PNG、PDF 格式</p>
+              </div>
+            </Dragger>
+          </div>
         )}
 
         {/* 预览和识别区域 */}
