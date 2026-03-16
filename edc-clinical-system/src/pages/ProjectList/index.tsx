@@ -13,6 +13,8 @@ import {
   Tooltip,
   Tabs,
   Badge,
+  Popconfirm,
+  message,
 } from 'antd'
 import {
   PlusOutlined,
@@ -22,6 +24,7 @@ import {
   FilterOutlined,
   CalendarOutlined,
   ApartmentOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons'
 import { mockProjects } from '@/utils/mockData'
 import StatusTag from '@/components/Common/StatusTag'
@@ -36,6 +39,7 @@ export default function ProjectList() {
   const [projects] = useState<Project[]>(mockProjects)
   const [activeTab, setActiveTab] = useState<string>('all')
   const [searchText, setSearchText] = useState('')
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
   // 状态统计
   const statusCounts = useMemo(() => {
@@ -65,6 +69,33 @@ export default function ProjectList() {
   // 查看项目详情
   const viewProjectDetail = (project: Project) => {
     navigate(`/projects/${project.id}`)
+  }
+
+  // 批量导出
+  const handleBatchExport = () => {
+    if (selectedRowKeys.length === 0) {
+      message.warning('请先选择要导出的项目')
+      return
+    }
+    console.log('批量导出项目IDs:', selectedRowKeys)
+    message.success(`已选择 ${selectedRowKeys.length} 个项目，开始导出`)
+  }
+
+  // 批量删除
+  const handleBatchDelete = () => {
+    if (selectedRowKeys.length === 0) {
+      message.warning('请先选择要删除的项目')
+      return
+    }
+    console.log('删除项目IDs:', selectedRowKeys)
+    message.success(`已删除 ${selectedRowKeys.length} 个项目`)
+    setSelectedRowKeys([])
+  }
+
+  // 表格行选择配置
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (keys: React.Key[]) => setSelectedRowKeys(keys),
   }
 
   // 表格列
@@ -235,11 +266,31 @@ export default function ProjectList() {
 
       {/* 项目表格 */}
       <Card style={{ borderRadius: 'var(--radius-lg)' }}>
+        {/* 批量操作栏 */}
+        {selectedRowKeys.length > 0 && (
+          <div style={{ marginBottom: 16, padding: 12, background: 'var(--color-primary-light)', borderRadius: 8 }}>
+            <Space>
+              <span style={{ marginRight: 8 }}>已选择 <strong>{selectedRowKeys.length}</strong> 项</span>
+              <Button size="small" onClick={() => setSelectedRowKeys([])}>取消选择</Button>
+              <Button size="small" icon={<ExportOutlined />} onClick={handleBatchExport}>批量导出</Button>
+              <Popconfirm
+                title="确定要删除选中的项目吗？"
+                description="此操作不可恢复"
+                onConfirm={handleBatchDelete}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Button size="small" danger icon={<DeleteOutlined />}>批量删除</Button>
+              </Popconfirm>
+            </Space>
+          </div>
+        )}
         <Table
           columns={columns}
           dataSource={filteredProjects}
           rowKey="id"
           rowClassName={getTableRowClassName}
+          rowSelection={rowSelection}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

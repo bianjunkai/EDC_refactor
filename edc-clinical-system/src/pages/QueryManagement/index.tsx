@@ -8,6 +8,8 @@ import {
   Drawer,
   Space,
   Tooltip,
+  Popconfirm,
+  message,
 } from 'antd'
 import {
   PlusOutlined,
@@ -15,6 +17,7 @@ import {
   SearchOutlined,
   EyeOutlined,
   MessageOutlined,
+  CloseCircleOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { mockQueries, mockProjects } from '@/utils/mockData'
@@ -34,6 +37,7 @@ export default function QueryManagement() {
   const [filterStatus, setFilterStatus] = useState<string>('全部')
   const [filterProject, setFilterProject] = useState<string>('全部')
   const [searchText, setSearchText] = useState('')
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
   // 筛选质疑
   const filteredQueries = queries.filter((query) => {
@@ -52,6 +56,23 @@ export default function QueryManagement() {
   const openDrawer = (query: Query) => {
     setSelectedQuery(query)
     setDrawerVisible(true)
+  }
+
+  // 批量关闭质疑
+  const handleBatchClose = () => {
+    if (selectedRowKeys.length === 0) {
+      message.warning('请先选择要关闭的质疑')
+      return
+    }
+    console.log('关闭质疑IDs:', selectedRowKeys)
+    message.success(`已关闭 ${selectedRowKeys.length} 条质疑`)
+    setSelectedRowKeys([])
+  }
+
+  // 表格行选择配置
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (keys: React.Key[]) => setSelectedRowKeys(keys),
   }
 
   // 表格列
@@ -203,11 +224,30 @@ export default function QueryManagement() {
 
       {/* 质疑表格 */}
       <Card style={{ borderRadius: 12 }}>
+        {/* 批量操作栏 */}
+        {selectedRowKeys.length > 0 && (
+          <div style={{ marginBottom: 16, padding: 12, background: 'var(--color-primary-light)', borderRadius: 8 }}>
+            <Space>
+              <span style={{ marginRight: 8 }}>已选择 <strong>{selectedRowKeys.length}</strong> 条质疑</span>
+              <Button size="small" onClick={() => setSelectedRowKeys([])}>取消选择</Button>
+              <Popconfirm
+                title="确定要关闭选中的质疑吗？"
+                description="关闭后将标记为已解决"
+                onConfirm={handleBatchClose}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Button size="small" type="primary" icon={<CloseCircleOutlined />}>批量关闭</Button>
+              </Popconfirm>
+            </Space>
+          </div>
+        )}
         <Table
           columns={columns}
           dataSource={filteredQueries}
           rowKey="id"
           rowClassName={getTableRowClassName}
+          rowSelection={rowSelection}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

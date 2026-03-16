@@ -26,6 +26,8 @@ import {
   FileSearchOutlined,
   TeamOutlined,
   FileSyncOutlined,
+  UserOutlined,
+  FormOutlined,
 } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { mockProjects, mockActivities, mockNotifications, mockQueries } from '@/utils/mockData'
@@ -52,7 +54,24 @@ export default function Dashboard() {
     const inReview = mockProjects.filter(p => p.status === '审批中').length
     const locked = mockProjects.filter(p => p.status === '已锁库').length
     const pending = mockProjects.filter(p => p.status === '立项中' || p.status === '已驳回').length
-    return { total, inProgress, inReview, locked, pending }
+
+    // 额外统计数据
+    const totalSubjects = mockProjects.reduce((sum, p) => sum + p.subjectCount, 0)
+    const enrolledSubjects = mockProjects.reduce((sum, p) => sum + p.enrolledCount, 0)
+    const totalQueries = mockProjects.reduce((sum, p) => sum + p.queryCount, 0)
+    const pendingQueries = mockQueries.filter(q => q.status === '待处理').length
+
+    return {
+      total,
+      inProgress,
+      inReview,
+      locked,
+      pending,
+      totalSubjects,
+      enrolledSubjects,
+      totalQueries,
+      pendingQueries,
+    }
   }, [])
 
   // 待办事项
@@ -200,6 +219,9 @@ export default function Dashboard() {
               valueStyle={{ color: '#5CB8A6', fontSize: 32, fontWeight: 600 }}
               prefix={<TeamOutlined />}
             />
+            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.inProgress / projectStats.total) * 100}%`, height: '100%', background: '#5CB8A6', borderRadius: 2 }} />
+            </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
         </Col>
@@ -211,6 +233,9 @@ export default function Dashboard() {
               valueStyle={{ color: '#2196F3', fontSize: 32, fontWeight: 600 }}
               prefix={<FileSearchOutlined />}
             />
+            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.inReview / projectStats.total) * 100}%`, height: '100%', background: '#2196F3', borderRadius: 2 }} />
+            </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
         </Col>
@@ -222,6 +247,9 @@ export default function Dashboard() {
               valueStyle={{ color: '#27AE60', fontSize: 32, fontWeight: 600 }}
               prefix={<CheckCircleOutlined />}
             />
+            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.locked / projectStats.total) * 100}%`, height: '100%', background: '#27AE60', borderRadius: 2 }} />
+            </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
           </Card>
         </Col>
@@ -233,7 +261,61 @@ export default function Dashboard() {
               valueStyle={{ color: '#F39C12', fontSize: 32, fontWeight: 600 }}
               prefix={<InfoCircleOutlined />}
             />
+            <div style={{ marginTop: 8, height: 4, background: '#f0f0f0', borderRadius: 2 }}>
+              <div style={{ width: `${(projectStats.pending / projectStats.total) * 100}%`, height: '100%', background: '#F39C12', borderRadius: 2 }} />
+            </div>
             <Button type="link" size="small" style={{ padding: 0 }}>查看</Button>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* 扩展统计：受试者、CRF、质疑 */}
+      <Row gutter={24} style={{ marginBottom: 24 }}>
+        <Col span={8}>
+          <Card className={styles.statCard} hoverable onClick={() => navigate('/subjects')}>
+            <Statistic
+              title="总受试者"
+              value={projectStats.totalSubjects}
+              suffix={`/ 已入组 ${projectStats.enrolledSubjects}`}
+              valueStyle={{ color: '#9C27B0', fontSize: 28, fontWeight: 600 }}
+              prefix={<UserOutlined />}
+            />
+            <Progress
+              percent={Math.round((projectStats.enrolledSubjects / projectStats.totalSubjects) * 100)}
+              strokeColor="#9C27B0"
+              showInfo={false}
+              style={{ marginTop: 8 }}
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card className={styles.statCard} hoverable onClick={() => navigate('/crf-designer')}>
+            <Statistic
+              title="CRF表单"
+              value={12}
+              valueStyle={{ color: '#2196F3', fontSize: 28, fontWeight: 600 }}
+              prefix={<FormOutlined />}
+            />
+            <div style={{ marginTop: 8, color: '#666', fontSize: 12 }}>
+              已发布: 8 | 草稿: 4
+            </div>
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card className={styles.statCard} hoverable onClick={() => navigate('/queries')}>
+            <Statistic
+              title="待处理质疑"
+              value={projectStats.pendingQueries}
+              suffix={`/ 总计 ${projectStats.totalQueries}`}
+              valueStyle={{ color: '#F39C12', fontSize: 28, fontWeight: 600 }}
+              prefix={<QuestionCircleOutlined />}
+            />
+            <Progress
+              percent={Math.round((projectStats.pendingQueries / projectStats.totalQueries) * 100)}
+              strokeColor="#F39C12"
+              showInfo={false}
+              style={{ marginTop: 8 }}
+            />
           </Card>
         </Col>
       </Row>

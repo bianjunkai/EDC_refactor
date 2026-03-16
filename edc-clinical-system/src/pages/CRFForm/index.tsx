@@ -21,6 +21,8 @@ import {
   Affix,
   Divider,
   Descriptions,
+  Drawer,
+  Table,
 } from 'antd'
 import {
   SaveOutlined,
@@ -76,6 +78,14 @@ const visitMenuItems: MenuProps['items'] = [
 const queries = [
   { id: 1, content: '血压值超出正常范围', status: 'open' },
   { id: 2, content: '日期格式不正确', status: 'resolved' },
+]
+
+// 字段修改历史记录
+const modificationHistory = [
+  { id: 1, field: '姓名缩写', oldValue: 'ZL', newValue: 'ZS', modifier: '张医生', modifyDate: '2026-03-15 10:30:00', reason: '录入错误' },
+  { id: 2, field: '性别', oldValue: '男', newValue: '男', modifier: '李护士', modifyDate: '2026-03-14 14:20:00', reason: '信息核实' },
+  { id: 3, field: '收缩压(mmHg)', oldValue: '120', newValue: '125', modifier: '张医生', modifyDate: '2026-03-13 09:15:00', reason: '复测更新' },
+  { id: 4, field: '既往病史描述', oldValue: '', newValue: '高血压病史5年', modifier: '张医生', modifyDate: '2026-03-12 16:45:00', reason: '补充信息' },
 ]
 
 // 记忆化的表单字段组件
@@ -204,6 +214,47 @@ export default function CRFForm() {
   const [validationStatus] = useState('valid')
   const [selectedCRF, setSelectedCRF] = useState('crf-1')
   const [ocrVisible, setOcrVisible] = useState(false)
+  const [historyVisible, setHistoryVisible] = useState(false)
+
+  // 修改历史表格列
+  const historyColumns = [
+    {
+      title: '字段',
+      dataIndex: 'field',
+      key: 'field',
+      width: 120,
+    },
+    {
+      title: '原值',
+      dataIndex: 'oldValue',
+      key: 'oldValue',
+      render: (val: string) => val || '-',
+    },
+    {
+      title: '新值',
+      dataIndex: 'newValue',
+      key: 'newValue',
+      render: (val: string) => val || '-',
+    },
+    {
+      title: '修改人',
+      dataIndex: 'modifier',
+      key: 'modifier',
+      width: 80,
+    },
+    {
+      title: '修改时间',
+      dataIndex: 'modifyDate',
+      key: 'modifyDate',
+      width: 150,
+    },
+    {
+      title: '修改原因',
+      dataIndex: 'reason',
+      key: 'reason',
+      ellipsis: true,
+    },
+  ]
 
   // 处理保存 - 使用 useCallback 避免重复创建
   const handleSave = useCallback(() => {
@@ -296,7 +347,7 @@ export default function CRFForm() {
                       OCR识别导入
                     </Button>
                     <Button icon={<QuestionCircleOutlined />}>发起质疑</Button>
-                    <Button icon={<HistoryOutlined />}>填写记录</Button>
+                    <Button icon={<HistoryOutlined />} onClick={() => setHistoryVisible(true)}>填写记录</Button>
                     <Button icon={<ArrowLeftOutlined />}>上一条</Button>
                     <Button type="primary" icon={<ArrowRightOutlined />}>
                       下一条
@@ -359,6 +410,29 @@ export default function CRFForm() {
           setOcrVisible(false)
         }}
       />
+
+      {/* 填写记录抽屉 */}
+      <Drawer
+        title="填写记录"
+        width={700}
+        open={historyVisible}
+        onClose={() => setHistoryVisible(false)}
+      >
+        <div style={{ marginBottom: 16 }}>
+          <Alert
+            message="以下显示该CRF所有字段的修改历史记录"
+            type="info"
+            showIcon
+          />
+        </div>
+        <Table
+          columns={historyColumns}
+          dataSource={modificationHistory}
+          rowKey="id"
+          pagination={false}
+          size="small"
+        />
+      </Drawer>
     </div>
   )
 }
