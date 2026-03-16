@@ -32,6 +32,7 @@ import {
   UserOutlined,
   CalendarOutlined,
   SettingOutlined,
+  PlusOutlined,
 } from '@ant-design/icons'
 import { mockProjects, mockQueries, mockActivities } from '@/utils/mockData'
 import { getStatusColor, getTableRowClassName } from '@/constants/theme'
@@ -288,6 +289,14 @@ export default function ProjectDetail() {
   // 渲染CRF配置标签
   const renderCRFConfig = () => (
     <Card className={styles.crfCard}>
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Space>
+          <Button type="primary" icon={<PlusOutlined />}>新建CRF</Button>
+          <Button icon={<FileTextOutlined />} onClick={() => navigate(`/projects/${id}/visit-crf-matrix`)}>
+            配置访视矩阵
+          </Button>
+        </Space>
+      </div>
       <List
         dataSource={[
           { name: '人口学资料', code: 'DM', fields: 5, status: '已发布' },
