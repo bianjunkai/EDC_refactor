@@ -22,6 +22,8 @@ const DictionaryManager = lazy(() => import('./pages/DictionaryManager'))
 const ProjectAudit = lazy(() => import('./pages/ProjectAudit'))
 const ProjectWizard = lazy(() => import('./pages/ProjectWizard'))
 const CRFTemplates = lazy(() => import('./pages/CRFTemplates'))
+const MyWork = lazy(() => import('./pages/MyWork'))
+const DataQuery = lazy(() => import('./pages/DataQuery'))
 
 /**
  * 页面加载占位符
@@ -138,6 +140,32 @@ export const router = createBrowserRouter([
           {
             path: 'dictionary',
             element: <DictionaryManager />,
+          },
+          // 我的工作
+          {
+            path: 'my-work',
+            element: <MyWork />,
+          },
+          {
+            path: 'my-work/pending-data',
+            element: <MyWork defaultTab="pending-data" />,
+          },
+          {
+            path: 'my-work/pending-queries',
+            element: <MyWork defaultTab="pending-queries" />,
+          },
+          // 数据查询
+          {
+            path: 'data-query',
+            element: <DataQuery />,
+          },
+          {
+            path: 'data-query/subjects',
+            element: <DataQuery defaultTab="subjects" />,
+          },
+          {
+            path: 'data-query/queries',
+            element: <DataQuery defaultTab="queries" />,
           },
         ],
       },
